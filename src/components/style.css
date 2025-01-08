@@ -1,63 +1,85 @@
-
-.login_main{
-align-items: center;
-height: 300px;
-width: 900px;
-margin: 150px  380px 400px;
+.container{
+  width: 500px;
+  border: 1px solid #4e8cff;
+  margin: auto;
+  margin-top: 200px;
+  border-radius: 20px;
+  padding: 30px 30px 30px 30px;
 }
-.login_h1{
-color:#c475e6;
-margin-left: 200px;
-margin-bottom: 20px;
 
 
+.login_h1 {
+  color: #4e8cff;
+  text-align: center;
+  margin-bottom: 20px;
 }
-.login_btn
-{
-     width: 57%;
-     margin-right: 300px;
-     margin-top: 20px;
-     background-color: #c475e6;
-     border: none;
+.login_btn {
+  width: 57%;
+  margin-right: 300px;
+  margin-top: 20px;
+  background-color: #4e8cff;
+  border: none;
+}
+.form {
+  width: 760px;
 }
 
 /* Home page */
+.profile-button{
+  position:fixed;
+  top: 10px;
+  right: 80px;
+  z-index: 1000;
+  margin-left: 30px;
+  width: fit-content;
+}
 
-.card
-{
-      background-color: #c475e6;
-     flex: 1 1 calc(25% - 20px); 
-     /* By default, each card takes 25% width */
-     border-radius:20px;
-     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
+
+.card {
+  background-color: #4e8cff;
+  flex: 1 1 calc(25% - 20px);
+  /* By default, each card takes 25% width */
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-container {
-     display: flex;
-     flex-wrap: wrap;
-     gap: 22px;
-     margin: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin: 20px;
+}
 
-   }
-   
-   @media (max-width: 208px) {
-     .card {
-       flex: 1 1 calc(35% - 20px); /* Cards will take 50% width on medium screens */
-     }
-   }
-   
-   @media (max-width: 300px) {
-     .card {
-       flex: 1 1 80%; /* Cards will stack on top of each other on small screens */
-     }
-   }
+@media (max-width: 208px) {
+  .card {
+    flex: 1 1 calc(35% - 20px); /* Cards will take 50% width on medium screens */
+  }
+}
+
+@media (max-width: 300px) {
+  .card {
+    flex: 1 1 80%; /* Cards will stack on top of each other on small screens */
+  }
+}
 .chart
 {
-     display: 'flex';
-      flex-direction: 'row'; gap: '10px';
-       align-items: 'flex-start';
-        margin-top: '20px';
+  flex: 1 1 calc(35% - 20px);
+  height: 400px;
+  padding: 20px;  
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-   /* Dashboard Slidebar */
-  
+
+
+@media (max-width: 1024px) {
+  .chart {
+  flex: 1 1 calc(40% - 20px)
+   }
+}
+@media (max-width: 768px) {
+  .chart {
+  flex: 1 1 100%
+   }
+}
+/* Dashboard Slidebar */

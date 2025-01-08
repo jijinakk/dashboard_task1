@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pie } from 'react-chartjs-2';
-import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale } from 'chart.js';
+import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale, elements } from 'chart.js';
 
 // Register the necessary components for Chart.js
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale, LinearScale);
@@ -29,12 +29,24 @@ const MostSellingCategories = () => {
         text: 'Most Selling Products',
       },
     },
-  };
+    elements:
+    {
+      arc:{
+        borderWidth: 0
+      },
+    },
+  cutout:"0%",
+  radius:"100%",
+};
 
   return (
-    <div style={{ width: '80%', height: '470px', marginLeft: '20px', paddingTop: '10px' }}>
+    // <div style={{width: '400px', height: '380px',
+    //   margin: "20px auto",
+    //   borderRadius: "15px", // Curved corners
+    //   padding: "20px 20px", // Padding inside the container
+    //   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"}}>
       <Pie data={data} options={options} />
-    </div>
+    // </div>
   );
 };
 

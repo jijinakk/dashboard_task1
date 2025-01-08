@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Line } from 'react-chartjs-2';
 import {
@@ -13,14 +14,14 @@ import {
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const Linechart = () => {
+const Customerschart = () => {
   const data = {
     labels: ['January', 'February', 'March', 'April','May','June','July','August','Septemper','October','November','December'],
     datasets: [
       {
-        label: 'sales',
+        label: '',
         data: [10, 30, 22, 35,25,40,20,12,50,40,55,53],
-        borderColor: ' #c475e6',
+        borderColor: ' #4e8cff',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         
       },
@@ -35,16 +36,20 @@ const Linechart = () => {
       },
       title: {
         display: true,
-        text: 'Sales Overview',
+        text: 'New Customers',
       },
     },
   };
 
   return (
-  <div style={{ width: '800px', height: '450px', margin: '0', margin: '10px 10px 10px 30px', textAlign: 'left' }}>
+  // <div  style={{width: '600px', height: '380px',
+  //   margin: "20px auto",
+  //   borderRadius: "15px", // Curved corners
+  //   padding: "20px 20px", // Padding inside the container
+  //   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"}}>
   <Line data={data} options={options} />
-  </div>
+  // </div>
   )
 };
 
-export default Linechart;
+export default Customerschart;
