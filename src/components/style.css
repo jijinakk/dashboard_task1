@@ -1,0 +1,63 @@
+
+.login_main{
+align-items: center;
+height: 300px;
+width: 900px;
+margin: 150px  380px 400px;
+}
+.login_h1{
+color:#c475e6;
+margin-left: 200px;
+margin-bottom: 20px;
+
+
+}
+.login_btn
+{
+     width: 57%;
+     margin-right: 300px;
+     margin-top: 20px;
+     background-color: #c475e6;
+     border: none;
+}
+
+/* Home page */
+
+.card
+{
+      background-color: #c475e6;
+     flex: 1 1 calc(25% - 20px); 
+     /* By default, each card takes 25% width */
+     border-radius:20px;
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.card-container {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 22px;
+     margin: 20px;
+
+   }
+   
+   @media (max-width: 208px) {
+     .card {
+       flex: 1 1 calc(35% - 20px); /* Cards will take 50% width on medium screens */
+     }
+   }
+   
+   @media (max-width: 300px) {
+     .card {
+       flex: 1 1 80%; /* Cards will stack on top of each other on small screens */
+     }
+   }
+.chart
+{
+     display: 'flex';
+      flex-direction: 'row'; gap: '10px';
+       align-items: 'flex-start';
+        margin-top: '20px';
+}
+   /* Dashboard Slidebar */
+  
