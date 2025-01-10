@@ -17,7 +17,6 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  const notifyLogin = () => {};
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = users.find(
