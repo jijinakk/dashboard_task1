@@ -2,7 +2,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState, useContext } from "react";
 import { userContext } from "../App";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 
 function AddUser() {
@@ -28,7 +28,6 @@ function AddUser() {
     const newUsers = [...users, newInput];
     console.log(newUsers);
     setUsers(newUsers);
-    toast.success("User added successfully",{ position: "top-center",autoClose:3000,theme:"colored"})
     navigate("/dashboard/users");
   };
   const handleCancel = () => {
@@ -111,8 +110,8 @@ function AddUser() {
             </Button>
           </div>
         </Form>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
   );
 }
