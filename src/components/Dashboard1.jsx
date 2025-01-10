@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useContext, use } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -14,20 +14,25 @@ import {
   MdOutlineDashboardCustomize,
   MdOutlineInventory,
   MdOutlinePayments,
+  MdClose,
 } from "react-icons/md";
 import { GoPeople } from "react-icons/go";
 import { CiStar } from "react-icons/ci";
 import { LiaLinkSolid } from "react-icons/lia";
-
+import { RiCloseLargeLine } from "react-icons/ri";
 import { Link, Outlet } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Dropdown } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
+import DropdownButton from "react-bootstrap/DropdownButton";
+import { userContext } from "../App";
 
-const Dashboard = ({ setIsAuthenticated }) => {
+const Dashboard = () => {
+  const { setIsAuthenticated, users } = useContext(userContext);
   const [showSidebar, setShowSidebar] = useState(true);
+  const [userDetails, setUserDetails] = useState("");
   const navigate = useNavigate();
-
+  const location = useLocation();
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   let logoutTimer;
 
@@ -78,17 +83,23 @@ const Dashboard = ({ setIsAuthenticated }) => {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h2
             className="fw-bold fst-italic text-white"
-            style={{ paddingBottom: "20px 0px 30px 5px" }}
+            style={{ padding: "10px 0px 30px 5px" }}
           >
             Shopy
           </h2>
-          {/* <Button
+          <Button
             variant="link"
             onClick={toggleSidebar}
-            style={{ color: "black", textDecoration: "none", fontSize: "30px",
-              position: "relative", marginLeft: "120px", marginTop: "10px"}}>
-            &times;
-          </Button> */}
+            style={{
+              color: "white",
+              textDecoration: "none",
+              fontSize: "30px",
+              position: "relative",
+              padding: "10px 0px 30px 5px",
+            }}
+          >
+            <MdClose />
+          </Button>
         </div>
         <Nav className="flex-column">
           <Nav.Link as={Link} to="home" className="mb-2 text-light">
@@ -100,8 +111,8 @@ const Dashboard = ({ setIsAuthenticated }) => {
           <Nav.Link href="#Inventory" className="mb-2 text-light">
             <MdOutlineInventory /> Inventory
           </Nav.Link>
-          <Nav.Link href="#Customers" className="mb-2 text-light">
-            <GoPeople /> Customers
+          <Nav.Link as={Link} to="users" className="mb-2 text-light">
+            <GoPeople /> Users
           </Nav.Link>
           <Nav.Link href="#Review" className="mb-2 text-light">
             <CiStar /> Review
@@ -125,6 +136,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
               border: "none",
               color: "black",
               paddingLeft: "30px",
+              visibility: showSidebar ? "hidden" : "visible",
             }}
           >
             <RxHamburgerMenu size={20} />
@@ -139,7 +151,7 @@ const Dashboard = ({ setIsAuthenticated }) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ms-auto">
-              <Nav.Link href="#link">
+              <Nav.Link className="notification-btn" href="#link">
                 <IoIosNotifications size={25} />
               </Nav.Link>
               {/* <Button variant="outline-dark" onClick={handleLogout}>
@@ -147,15 +159,15 @@ const Dashboard = ({ setIsAuthenticated }) => {
               </Button> */}
             </Nav>
             <div>
-              <Dropdown className="profile-button">
-                <Dropdown.Toggle variant="primary" id="dropdown-basic" className="dropdown-toggle">
-                  <CgProfile />
-                </Dropdown.Toggle>
-                <Dropdown.Menu style={{ width: "5px" }}>
-                  <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-                   <Dropdown.Item>Profile</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
+              <DropdownButton
+                className="dropdown-button"
+                id="dropdown-basic-button"
+                align={"end"}
+                title={<CgProfile />}
+              >
+                <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
+              </DropdownButton>
             </div>
           </Navbar.Collapse>
         </Navbar>

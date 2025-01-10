@@ -1,33 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import  Alert  from "react-bootstrap/Alert";
+import { useState, useContext } from "react";
+import Alert from "react-bootstrap/Alert";
+import { userContext } from "../App";
+import { ToastContainer, toast } from "react-toastify";
 
-const Login = ({ setIsAuthenticated }) => {
+const Login = () => {
+  const { setIsAuthenticated, users } = useContext(userContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const [alertvariant, setAlertVariant] = useState("");
   const navigate = useNavigate();
+
+  const notifyLogin = () => {};
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form default behavior
-
-    const users = [
-      { username: "example", password: "eg123" },
-      { username: "janeexamplecom", password: "mypassword456" },
-      { username: "admin@example.com", password: "admin123" },
-    ];
-
-    //   try {
-    //     const response = await axios.post('https://json-placeholder.mock.beeceptor.com/login', {
-    //       email,
-    //       password,
-    //     });
+    e.preventDefault();
     const user = users.find(
       (user) => user.username === username && user.password === password
     );
@@ -37,43 +29,37 @@ const Login = ({ setIsAuthenticated }) => {
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem("user", JSON.stringify(user)); // Store the user details
       setIsAuthenticated(true); // Update the authentication state
-      console.log("Login Successful");   
-      setMessage("Login Successful");
-      setAlertVariant("success");
+      console.log("Login Successful", user);
+      toast.success("Login successful", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
       setTimeout(() => {
-        navigate("/dashboard");
-
-      },800);
+        navigate("/dashboard", { state: { user } });
+      }, 800);
     } else {
       // Authentication failed
-      
-      setAlertVariant("danger");
-      setMessage("Invalid credentials");
+
+      toast.warn("Invalid Credentials", {
+        position: "top-center",
+        autoClose: 3000,
+        theme: "colored",
+      });
+
       setUsername("");
       setPassword("");
-      
     }
-    //     if (response.data.success) {
-    //         localStorage.setItem('token', response.data.token); // Save the token
-    //         localStorage.setItem('isAuthenticated', 'true'); // Set auth status to true
-    //         setIsAuthenticated(true); // Update auth state in App
-    //       // You can redirect or show authenticated content here
-    //       console.log('Login Successful');
-    //     }
-    //   } catch (err) {
-    //     setError('Invalid credentials or network error');
-    //     console.error(err);
-    //   }
   };
 
   return (
-    
     <div className="container">
-      <h1 className='login_h1'>Login</h1>
-      {message && <Alert variant={alertvariant} onClose={() => setMessage("")} >{message}</Alert>}
+      <h1 className="login_h1">Login</h1>
       <Form onSubmit={handleSubmit} className="form">
-        <Form.Group as={Row} className="mb-3 " >
-          <Form.Label column sm={2}>Username</Form.Label>
+        <Form.Group as={Row} className="mb-3 ">
+          <Form.Label column sm={2}>
+            Username
+          </Form.Label>
           <Col sm={5}>
             <Form.Control
               placeholder="Username"
@@ -84,8 +70,14 @@ const Login = ({ setIsAuthenticated }) => {
           </Col>
         </Form.Group>
 
-        <Form.Group as={Row} className="mb-3 align-items-center" controlId="formHorizontalPassword">
-          <Form.Label column sm={2}>Password</Form.Label>
+        <Form.Group
+          as={Row}
+          className="mb-3 align-items-center"
+          controlId="formHorizontalPassword"
+        >
+          <Form.Label column sm={2}>
+            Password
+          </Form.Label>
           <Col sm={5}>
             <Form.Control
               type="password"
@@ -97,12 +89,12 @@ const Login = ({ setIsAuthenticated }) => {
           </Col>
         </Form.Group>
 
-        <Button  type="submit" className="login_btn">
+        <Button type="submit" className="login_btn">
           Login
         </Button>
       </Form>
+      <ToastContainer />
     </div>
-  
   );
 };
 
