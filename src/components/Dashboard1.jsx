@@ -22,23 +22,27 @@ import { LiaLinkSolid } from "react-icons/lia";
 import { RiCloseLargeLine } from "react-icons/ri";
 import { Link, Outlet } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, DropdownDivider, DropdownMenu } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { userContext } from "../App";
 
 const Dashboard = () => {
-  const { setIsAuthenticated, users } = useContext(userContext);
+  const { setIsAuthenticated, users,loggedInUser} = useContext(userContext);
   const [showSidebar, setShowSidebar] = useState(true);
   const [userDetails, setUserDetails] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   let logoutTimer;
-
+  // const user =location.state?.user || JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    console.log(users);
+  })
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated"); // Clear authentication state
-    localStorage.removeItem("user"); // Optionally remove user details
+    localStorage.removeItem("user");
+    localStorage.removeItem("loggedInUser"); // Optionally remove user details
     setIsAuthenticated(false); // Set authentication state to false
     navigate("/"); // Redirect to login page
   };
@@ -66,6 +70,12 @@ const Dashboard = () => {
       clearTimeout(logoutTimer); // Cleanup timer on component unmount
     };
   }, []);
+  const userProfile = () => {
+    navigate("userprofile");
+  };
+  const userList = () => {
+    navigate("users");
+  };
   return (
     <div style={{ display: "flex" }}>
       {/* Sidebar */}
@@ -111,7 +121,7 @@ const Dashboard = () => {
           <Nav.Link href="#Inventory" className="mb-2 text-light">
             <MdOutlineInventory /> Inventory
           </Nav.Link>
-          <Nav.Link as={Link} to="users" className="mb-2 text-light">
+          <Nav.Link onClick={userList} className="mb-2 text-light">
             <GoPeople /> Users
           </Nav.Link>
           <Nav.Link href="#Review" className="mb-2 text-light">
@@ -159,15 +169,18 @@ const Dashboard = () => {
               </Button> */}
             </Nav>
             <div>
-              <DropdownButton
-                className="dropdown-button"
+              <Dropdown>
+                <Dropdown.Toggle
                 id="dropdown-basic-button"
-                align={"end"}
-                title={<CgProfile />}
-              >
-                <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+                className="dropdown-toggle">
+                  <CgProfile size={25} />
+                 <span>{loggedInUser?.firstName || "User"}</span>
+              </Dropdown.Toggle>
+              <DropdownMenu className="dropdown-menu">
+                <Dropdown.Item onClick={userProfile} >Profile</Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout}>Logout</Dropdown.Item>
-              </DropdownButton>
+                </DropdownMenu>
+              </Dropdown>
             </div>
           </Navbar.Collapse>
         </Navbar>

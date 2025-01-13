@@ -11,6 +11,7 @@ import Home from './components/Home';
 import Product from './components/Product';
 import Users from './components/Users';
 import AddUser from './components/AddUser';
+import UserProfile from './components/UserProfile';
 
 const userContext =createContext();
 function App() {
@@ -24,8 +25,7 @@ function App() {
     const authStatus = localStorage.getItem('isAuthenticated');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
-      const user = JSON.parse(localStorage.getItem('user'));
-      setLoggedInUser(user);
+     
     }
   }, []);
 
@@ -40,7 +40,8 @@ function App() {
            <Route  path="home" element={<Home/>} />  {/* Correct relative path */}
            <Route path="product" element={<Product/>} />  {/* Correct relative path */}
             <Route path="users" element={<Users />} />
-
+            <Route path='userprofile' element={<UserProfile/>} />
+           
           </Route>
             <Route
               path="/"

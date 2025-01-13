@@ -11,10 +11,9 @@ import { userContext } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
-  const { setIsAuthenticated, users } = useContext(userContext);
+  const { setIsAuthenticated, users,loggedInUser,setLoggedInUser } = useContext(userContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -29,13 +28,16 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(user)); // Store the user details
       setIsAuthenticated(true); // Update the authentication state
       console.log("Login Successful", user);
+      // const getuser = JSON.parse(localStorage.getItem('user'));
+      setLoggedInUser(user);
+      console.log( loggedInUser);
       toast.success("Login successful", {
         position: "top-center",
         autoClose: 3000,
         theme: "colored",
       });
       setTimeout(() => {
-        navigate("/dashboard", { state: { user } });
+        navigate("/dashboard");
       }, 800);
     } else {
       // Authentication failed
