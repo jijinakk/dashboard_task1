@@ -1,62 +1,69 @@
-import logo from './logo.svg';
-import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import Login from './components/Login';
-import './components/style.css'
-import { BrowserRouter as Router, Routes, Route,Link } from 'react-router-dom';
-import Dashboard from './components/Dashboard1';
-import { useState,useEffect, createContext} from 'react';
-import Home from './components/Home';
-import Product from './components/Product';
-import Users from './components/Users';
-import AddUser from './components/AddUser';
-import UserProfile from './components/UserProfile';
+import "./components/style.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import { useState, useEffect, createContext } from "react";
 
-const userContext =createContext();
+import RouteConfig from "./components/RouteConfig";
+import axios from "axios";
+
+const userContext = createContext();
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [users, setUsers] = useState([]);
   const [loggedInUser, setLoggedInUser] = useState([]);
   // Check localStorage for authentication status
-  useEffect(() => {
-    fetch('https://dummyjson.com/users').then((res) => res.json()).then(data => setUsers(data.users));
-    console.log(users);
-    const authStatus = localStorage.getItem('isAuthenticated');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-     
+  const getUserApi = async () => {
+    try {
+      const res = await axios.get("https://dummyjson.com/users");
+      setUsers(res.data.users);
+      console.log(res.data.users);
+      const authStatus = localStorage.getItem("isAuthenticated");
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      console.log("authStatus", authStatus);
+      if (authStatus === "true") {
+        setIsAuthenticated(true);
+        // console.log(isAuthenticated);
+        setLoggedInUser(user);
+        // console.log(user);
+      }
+    } catch (error) {
+      console.error("Error:", error);
     }
+  };
+
+  useEffect(() => {
+    getUserApi();
   }, []);
+  // useEffect(() => {
+  //   console.log("App isAuthenticated:", isAuthenticated);
+  // }, [isAuthenticated]);
 
   return (
-    <Router>
-      <div className="app-container">
-        <main>
-          <userContext.Provider value={{ loggedInUser, setLoggedInUser,users,setIsAuthenticated,setUsers}}>
-          <Routes>
-          <Route path="/dashboard" element={<Dashboard setIsAuthenticated={setIsAuthenticated}/>}>
-          <Route index element={<Home />} />
-           <Route  path="home" element={<Home/>} />  {/* Correct relative path */}
-           <Route path="product" element={<Product/>} />  {/* Correct relative path */}
-            <Route path="users" element={<Users />} />
-            <Route path='userprofile' element={<UserProfile/>} />
-           
-          </Route>
-            <Route
-              path="/"
-              element={<Login />}
+    <div className="app-container">
+      <main>
+        <userContext.Provider
+          value={{
+            loggedInUser,
+            setLoggedInUser,
+            users,
+            setIsAuthenticated,
+            setUsers,
+          }}
+        >
+          <Router>
+            <RouteConfig
+              isAuthenticated={isAuthenticated}
+              setIsAuthenticated={setIsAuthenticated}
             />
-            {/* Add more routes as needed */}
-            <Route path='adduser' element={<AddUser/>} />
-          </Routes>
-          </userContext.Provider>
-        </main>
-      </div>
-    </Router>
+          </Router>
+        </userContext.Provider>
+      </main>
+    </div>
   );
-};
-
+}
 
 export default App;
-export {userContext}
+export { userContext };

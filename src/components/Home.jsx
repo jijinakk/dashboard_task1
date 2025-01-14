@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
 import Card from "react-bootstrap/Card";
-import LineChart from "./Saleschart";
-import ProgressBar from "react-bootstrap/ProgressBar";
 import MostSellingCategories from "./MostSellingChart";
 import Customerschart from "./Customerschart";
 import Saleschart from "./Saleschart";
@@ -9,7 +7,7 @@ import { userContext } from "../App";
 
 const Home = () => {
   const { users } = useContext(userContext);
-  const newUsers = users.length;
+  const newUsers = users?.length;
   return (
     <div style={{ padding: "30px" }}>
       <div className="card-container">

@@ -1,14 +1,11 @@
-import React, { useEffect, useContext, use } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import Container from "react-bootstrap/Container";
+import React, { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { IoLogOut, IoBagOutline } from "react-icons/io5";
+import {  IoBagOutline } from "react-icons/io5";
 import { IoIosNotifications } from "react-icons/io";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
-import { FaGripLines } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import {
   MdOutlineDashboardCustomize,
@@ -19,26 +16,20 @@ import {
 import { GoPeople } from "react-icons/go";
 import { CiStar } from "react-icons/ci";
 import { LiaLinkSolid } from "react-icons/lia";
-import { RiCloseLargeLine } from "react-icons/ri";
 import { Link, Outlet } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Dropdown, DropdownDivider, DropdownMenu } from "react-bootstrap";
+import { Dropdown, DropdownMenu } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import { userContext } from "../App";
 
 const Dashboard = () => {
-  const { setIsAuthenticated, users,loggedInUser} = useContext(userContext);
+  const { setIsAuthenticated,loggedInUser} = useContext(userContext);
   const [showSidebar, setShowSidebar] = useState(true);
-  const [userDetails, setUserDetails] = useState("");
   const navigate = useNavigate();
-  const location = useLocation();
   const toggleSidebar = () => setShowSidebar(!showSidebar);
   let logoutTimer;
   // const user =location.state?.user || JSON.parse(localStorage.getItem("user"));
-  useEffect(() => {
-    console.log(users);
-  })
+ 
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated"); // Clear authentication state
     localStorage.removeItem("user");
@@ -184,7 +175,8 @@ const Dashboard = () => {
             </div>
           </Navbar.Collapse>
         </Navbar>
-        <Outlet /> {/* Child components will render here based on the route */}
+        <div><Outlet /></div>
+         {/* Child components will render here based on the route */}
       </div>
     </div>
   );

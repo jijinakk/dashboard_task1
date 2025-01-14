@@ -1,19 +1,21 @@
-import React, { useState, useContext, useEffect, use } from "react";
+import React, { useState, useContext} from "react";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 import { Button, Modal, Form } from "react-bootstrap";
 import { TiPlus } from "react-icons/ti";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { userContext } from "../App";
 import { IoEye } from "react-icons/io5";
 import { ToastContainer, toast } from "react-toastify";
+import {  Row, Col } from "react-bootstrap";
+
 const Users = () => {
   //   useEffect(() => {
   //     console.log(users);
   //   });
-  const { users, setUsers, loggedInUser, setLoggedInUser } =
+  const { users, setUsers, loggedInUser } =
     useContext(userContext);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -22,11 +24,10 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
   const navigate = useNavigate();
-  const location = useLocation();
-  const { user } = location.state || {};
 
   const [formInput, setFormInput] = useState({
     id: "",
+    img:"",
     firstName: "",
     lastName: "",
     company: "",
@@ -39,11 +40,11 @@ const Users = () => {
     username: "",
     password: "",
   });
-  const filteredUsers = users.filter((user) => user.id !== loggedInUser.id);
+  const filteredUsers = users?.filter((user) => user.id !== loggedInUser.id);
   console.log(filteredUsers);
 
   const handleAddUser = () => {
-    navigate("/adduser");
+    navigate("/dashboard/adduser");
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -66,15 +67,16 @@ const Users = () => {
     );
   }
 
-  const handleView = (users) => {
+  const handleAction = (users,actionType) => {
     setFormInput({
       id: users.id,
+      img:users?.image,
       firstName: users.firstName,
       lastName: users.lastName,
       company: users.name,
       phone: users.phone,
       email: users.email,
-      birthdate: users.birthdate,
+      birthdate: users.birthDate,
       role: users.role,
       country: users.address?.country || users.country || "",
       state: users.address?.state || users.state || "",
@@ -82,28 +84,20 @@ const Users = () => {
       username: users.username,
       password: users.password,
     });
+
+
     console.log(formInput);
-    setShowViewModal(true);
+     if(actionType==="view")
+     {
+      setShowViewModal(true);
+
+     }
+     else if(actionType==="edit")
+     {
+      setShowEditModal(true);
+     }
   };
-  const handleEdit = (users) => {
-    setFormInput({
-      id: users.id,
-      firstName: users.firstName,
-      lastName: users.lastName,
-      company: users.name,
-      phone: users.phone,
-      email: users.email,
-      birthdate: users.birthdate,
-      role: users.role,
-      country: users.address?.country || users.country || "",
-      state: users.address?.state || users.state || "",
-      postalCode: users.address?.postalCode   || users.postalCode || "",
-      username: users.username,
-      password: users.password,
-    });
-    console.log(formInput);
-    setShowEditModal(true);
-  };
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log({ name }, { value });
@@ -179,8 +173,8 @@ const Users = () => {
               <td>{user.email}</td>
               <td>{user.phone}</td>
               <td>
-                <IoEye onClick={() => handleView(user)} />{" "}
-                <FaEdit onClick={() => handleEdit(user)} />{" "}
+                <IoEye onClick={() => handleAction(user,"view")} />{" "}
+                <FaEdit onClick={() => handleAction(user,"edit")} />{" "}
                 <MdDelete onClick={() => handleDelete(user)} />
               </td>
             </tr>
@@ -194,7 +188,7 @@ const Users = () => {
       <Modal
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
-        size="lg"
+        size="xl"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -204,106 +198,153 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="d-flex justify-content-center align-items-center">
-            <Form className="edit-user-form" onSubmit={handleEditSubmit}>
-              <Form.Group className="mb-3" controlId="formfirstname">
+        <div>
+      <div className="user-profile-container">
+        <Row className="mb-2">
+          <Col md={2}>
+            <img src={formInput.img || " Image"} alt="img" />
+          </Col>
+          <Col md={2}>
+            <h5>
+              {formInput.firstName} {formInput.lastName}
+            </h5>
+            <h6>{formInput.role}</h6>
+            <h6>
+              {formInput?.company?.title || " --"},
+              {formInput?.company?.name || " "}
+            </h6>
+          </Col>
+          
+        </Row>
+      </div>
+      <div className="user-profile-container mt-4">
+        <Form>
+          <Row className="mb-3">
+            <Col md={4}>
+              <h4>Personal Details</h4>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col md={4}>
+              <Form.Group controlId="formfirstname">
                 <Form.Label>First Name</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="firstName"
-                  value={formInput.firstName}
-                  placeholder="Enter First Name"
-                  readOnly
+                  value={formInput?.firstName || " --- "}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formlastname">
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formlastname">
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="lastName"
-                  value={formInput.lastName}
-                  placeholder="Enter Last Name"
-                  readOnly
+                  value={formInput?.lastName || "--- "}
                 />
               </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formPhone">
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formdateOfBirth">
+                <Form.Label>Date Of Birth</Form.Label>
+                <Form.Control
+                  className="user-profile-input"
+                  type="text"
+                  name="dateOfBirth"
+                  value={formInput?.birthdate || "--- "}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col md={4}>
+              <Form.Group controlId="formEmail">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  className="user-profile-input"
+                  type="text"
+                  name="email"
+                  value={formInput?.email || " ----"}
+                />
+              </Form.Group>
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formPhone">
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="phone"
-                  value={formInput.phone}
-                  readOnly
+                  value={formInput?.phone || "---- "}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formInput.email}
-                  placeholder="Enter email"
-                  readOnly
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formdob">
-                <Form.Label>Date of Birth</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="birthdate"
-                  value={formInput.birthdate}
-                  placeholder="Enter Date of Birth"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formRole">
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formRole">
                 <Form.Label>Role</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="role"
-                  value={formInput.role}
-                  placeholder="Enter Role"
-                />{" "}
+                  value={formInput?.role || " ----"}
+                />
               </Form.Group>
+            </Col>
+          </Row>
+        </Form>
+      </div>
 
-              <Form.Group className="mb-3" controlId="formCountry">
+      <div className="user-profile-container mt-4">
+        <Form>
+          <Row className="mb-3">
+            <Col md={4}>
+              <h4>Address</h4>
+            </Col>
+          </Row>
+          <Row className="mb-3">
+            <Col md={4}>
+              <Form.Group controlId="formCountry">
                 <Form.Label>Country</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="country"
-                  value={formInput.country}
+                  value={loggedInUser?.address?.country || " ----"}
                   placeholder="Enter Country"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formstate">
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formState">
                 <Form.Label>State</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
                   name="state"
-                  value={formInput.state}
-                  placeholder="Enter State"
+                  value={loggedInUser?.address?.state || " ----"}
+                  placeholder="Enter Your State"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formpostal">
+            </Col>
+            <Col md={4}>
+              <Form.Group controlId="formPostal">
                 <Form.Label>Postal Code</Form.Label>
                 <Form.Control
+                  className="user-profile-input"
                   type="text"
-                  name="postalCode"
-                  value={formInput.postalCode}
-                  placeholder="Enter Postal Code"
+                  name="postal"
+                  value={loggedInUser?.address?.postalCode}
+                  placeholder="Enter Your Postal Code"
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formUsername">
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="username"
-                  value={formInput.username}
-                  placeholder="Enter username"
-                  readOnly
-                />
-              </Form.Group>
-            </Form>
-          </div>
+            </Col>
+          </Row>
+        </Form>
+      </div>
+    </div>
         </Modal.Body>
       </Modal>
       {/* Edit Modal */}
@@ -321,130 +362,172 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="d-flex justify-content-center align-items-center">
-            <Form className="edit-user-form" onSubmit={handleEditSubmit}>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>First Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="firstName"
-                  value={formInput.firstName}
-                  onChange={handleChange}
-                  placeholder="Enter First Name"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Last Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="lastName"
-                  value={formInput.lastName}
-                  onChange={handleChange}
-                  placeholder="Enter Last Name"
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formPhone">
-                <Form.Label>Phone</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="phone"
-                  value={formInput.phone}
-                  onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  name="email"
-                  value={formInput.email}
-                  onChange={handleChange}
-                  placeholder="Enter email"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formdob">
-                <Form.Label>Date of Birth</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="birthdate"
-                  value={formInput.birthdate}
-                  onChange={handleChange}
-                  placeholder="Enter Date of Birth"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formRole">
-                <Form.Label>Role</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="role"
-                  value={formInput.role}
-                  onChange={handleChange}
-                  placeholder="Enter Role"
-                />{" "}
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="formCountry">
-                <Form.Label>Country</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="country"
-                  value={formInput.country}
-                  onChange={handleChange}
-                  placeholder="Enter Country"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formstate">
-                <Form.Label>State</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="state"
-                  value={formInput.state}
-                  onChange={handleChange}
-                  placeholder="Enter State"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formpostal">
-                <Form.Label>Postal Code</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="postalCode"
-                  value={formInput.postalCode}
-                  onChange={handleChange}
-                  placeholder="Enter Postal Code"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formUsername">
-                <Form.Label>Username</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="username"
-                  value={formInput.username}
-                  onChange={handleChange}
-                  placeholder="Enter username"
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  type="password"
-                  name="password"
-                  value={formInput.password}
-                  onChange={handleChange}
-                  placeholder="Password"
-                />
-              </Form.Group>
-              <div className="d-flex justify-content-center">
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="add-user-btn"
-                >
-                  Edit
-                </Button>
-              </div>
-            </Form>
-          </div>
+        <div className="d-flex justify-content-center align-items-center">
+  <Form className="edit-user-form" onSubmit={handleEditSubmit}>
+    <Form.Group className="mb-3" controlId="formBasicEmail">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">First Name</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="firstName"
+            value={formInput.firstName}
+            onChange={handleChange}
+            placeholder="Enter First Name"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formBasicEmail">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Last Name</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="lastName"
+            value={formInput.lastName}
+            onChange={handleChange}
+            placeholder="Enter Last Name"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formPhone">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Phone</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="phone"
+            value={formInput.phone}
+            onChange={handleChange}
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formBasicEmail">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Email address</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="email"
+            name="email"
+            value={formInput.email}
+            onChange={handleChange}
+            placeholder="Enter email"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formdob">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Date of Birth</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="birthdate"
+            value={formInput.birthdate}
+            onChange={handleChange}
+            placeholder="Enter Date of Birth"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formRole">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Role</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="role"
+            value={formInput.role}
+            onChange={handleChange}
+            placeholder="Enter Role"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formCountry">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Country</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="country"
+            value={formInput.country}
+            onChange={handleChange}
+            placeholder="Enter Country"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formstate">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">State</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="state"
+            value={formInput.state}
+            onChange={handleChange}
+            placeholder="Enter State"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formpostal">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Postal Code</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="postalCode"
+            value={formInput.postalCode}
+            onChange={handleChange}
+            placeholder="Enter Postal Code"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formUsername">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Username</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="text"
+            name="username"
+            value={formInput.username}
+            onChange={handleChange}
+            placeholder="Enter username"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <Form.Group className="mb-3" controlId="formBasicPassword">
+      <div className="row">
+        <Form.Label className="col-sm-4 col-form-label text-start">Password</Form.Label>
+        <div className="col-sm-8">
+          <Form.Control
+            type="password"
+            name="password"
+            value={formInput.password}
+            onChange={handleChange}
+            placeholder="Password"
+          />
+        </div>
+      </div>
+    </Form.Group>
+    <div className="d-flex justify-content-center">
+      <Button
+        variant="primary"
+        type="submit"
+        className="add-user-btn"
+      >
+        Edit
+      </Button>
+    </div>
+  </Form>
+</div>
         </Modal.Body>
       </Modal>
       {/* Delete Modal */}

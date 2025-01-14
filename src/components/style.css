@@ -116,11 +116,10 @@
 }
 /* Adduser Page */
 .add-user-form {
-  width: 600px;
+  width: 900px;
   height: auto;
   padding: 50px 50px 50px 50px;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
 }
 .user-h3 {
   margin: 2px 20px 20px 20px;

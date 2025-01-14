@@ -8,7 +8,7 @@ import {
   ArcElement,
   CategoryScale,
   LinearScale,
-  elements,
+  
 } from "chart.js";
 
 // Register the necessary components for Chart.js

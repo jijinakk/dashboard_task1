@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
-import Alert from "react-bootstrap/Alert";
 import { userContext } from "../App";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -16,6 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = users.find(

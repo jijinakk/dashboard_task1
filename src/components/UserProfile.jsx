@@ -3,26 +3,30 @@ import { Form, Row, Col } from "react-bootstrap";
 import { userContext } from "../App";
 import { useContext } from "react";
 const UserProfile = () => {
-   const {users,loggedInUser} = useContext(userContext);
+  const {  loggedInUser } = useContext(userContext);
   return (
     <div>
       <h3 className="my-profile-header">My Profile</h3>
       <div className="user-profile-container">
         <Row className="mb-2">
           <Col md={2}>
-            <img src={loggedInUser.image || " Image"} />
+            <img src={loggedInUser.image || " Image"} alt="user" />
           </Col>
           <Col md={2}>
             <h5>
               {loggedInUser.firstName} {loggedInUser.lastName}
             </h5>
             <h6>{loggedInUser.role}</h6>
-            <h6>{loggedInUser?.company?.title || " --"},{loggedInUser?.company?.name|| " "}</h6>
+            <h6>
+              {loggedInUser?.company?.title || " --"},
+              {loggedInUser?.company?.name || " "}
+            </h6>
           </Col>
+          
         </Row>
       </div>
       <div className="user-profile-container mt-4">
-        <Form >
+        <Form>
           <Row className="mb-3">
             <Col md={4}>
               <h4>Personal Details</h4>
@@ -44,8 +48,7 @@ const UserProfile = () => {
               <Form.Group controlId="formlastname">
                 <Form.Label>Last Name</Form.Label>
                 <Form.Control
-                                  className="user-profile-input"
-
+                  className="user-profile-input"
                   type="text"
                   name="lastName"
                   value={loggedInUser?.lastName || "--- "}
@@ -56,8 +59,7 @@ const UserProfile = () => {
               <Form.Group controlId="formdateOfBirth">
                 <Form.Label>Date Of Birth</Form.Label>
                 <Form.Control
-                                  className="user-profile-input"
-
+                  className="user-profile-input"
                   type="text"
                   name="dateOfBirth"
                   value={loggedInUser?.birthDate || "--- "}
@@ -70,7 +72,7 @@ const UserProfile = () => {
               <Form.Group controlId="formEmail">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                className="user-profile-input"
+                  className="user-profile-input"
                   type="text"
                   name="email"
                   value={loggedInUser?.email || " ----"}
@@ -81,7 +83,7 @@ const UserProfile = () => {
               <Form.Group controlId="formPhone">
                 <Form.Label>Phone</Form.Label>
                 <Form.Control
-                className="user-profile-input"
+                  className="user-profile-input"
                   type="text"
                   name="phone"
                   value={loggedInUser?.phone || "---- "}
@@ -92,7 +94,7 @@ const UserProfile = () => {
               <Form.Group controlId="formRole">
                 <Form.Label>Role</Form.Label>
                 <Form.Control
-                className="user-profile-input"
+                  className="user-profile-input"
                   type="text"
                   name="role"
                   value={loggedInUser?.role || " ----"}
@@ -105,7 +107,7 @@ const UserProfile = () => {
 
       <div className="user-profile-container mt-4">
         <Form>
-        <Row className="mb-3">
+          <Row className="mb-3">
             <Col md={4}>
               <h4>Address</h4>
             </Col>
@@ -115,7 +117,7 @@ const UserProfile = () => {
               <Form.Group controlId="formCountry">
                 <Form.Label>Country</Form.Label>
                 <Form.Control
-                className="user-profile-input"
+                  className="user-profile-input"
                   type="text"
                   name="country"
                   value={loggedInUser?.address?.country || " ----"}
@@ -127,7 +129,7 @@ const UserProfile = () => {
               <Form.Group controlId="formState">
                 <Form.Label>State</Form.Label>
                 <Form.Control
-                className="user-profile-input"
+                  className="user-profile-input"
                   type="text"
                   name="state"
                   value={loggedInUser?.address?.state || " ----"}
