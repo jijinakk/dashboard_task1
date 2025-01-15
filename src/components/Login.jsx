@@ -3,55 +3,45 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import {  useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
-import { userContext } from "../App";
-import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useState, useContext,useEffect} from "react";
+import {userContext} from  "./UserContext";
+import {  toast } from "react-toastify";
+import UserContext from "./UserContext";
 
 const Login = () => {
-  const { setIsAuthenticated, users,loggedInUser,setLoggedInUser } = useContext(userContext);
+  const { setIsAuthenticated, setUsers } = useContext(userContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
- 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = users.find(
-      (user) => user.username === username && user.password === password
-    );
-    console.log(user);
-    if (user) {
-      // Authentication successful
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("user", JSON.stringify(user)); // Store the user details
-      setIsAuthenticated(true); // Update the authentication state
-      console.log("Login Successful", user);
-      // const getuser = JSON.parse(localStorage.getItem('user'));
-      setLoggedInUser(user);
-      console.log( loggedInUser);
-      toast.success("Login successful", {
-        position: "top-center",
-        autoClose: 3000,
-        theme: "colored",
-      });
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 800);
-    } else {
-      // Authentication failed
+    try{
+      const response = await axios.post('https://dummyjson.com/user/login',{username,password});
+      const {accessToken} =response.data;
+      console.log("res",response.data);
+      localStorage.setItem("token",accessToken);
+      const userresponse = await axios.get('https://dummyjson.com/user/me',{
+        headers:{
+          Authorization:`Bearer ${accessToken}`
+        }
+      })
+      const userDetails =userresponse.data;
+      localStorage.setItem("user",JSON.stringify(userDetails));
+      setIsAuthenticated(true);
+      setUsers([userDetails]);
+      toast.success("Login Successful")
+      navigate("/dashboard");
 
-      toast.warn("Invalid Credentials", {
-        position: "top-center",
-        autoClose: 3000,
-        theme: "colored",
-      });
-
-      setUsername("");
-      setPassword("");
+    }catch(error)
+    {
+      console.error("Login Failed:",error);
+      alert("invalid");
     }
   };
-
   return (
     <div className="container">
       <h1 className="login_h1">Login</h1>
@@ -93,7 +83,6 @@ const Login = () => {
           Login
         </Button>
       </Form>
-      <ToastContainer />
     </div>
   );
 };

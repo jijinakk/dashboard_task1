@@ -5,7 +5,7 @@
   margin-top: 200px;
   border-radius: 20px;
   padding: 30px 30px 30px 30px;
-}
+
 
 .login_h1 {
   color: #4e8cff;
@@ -22,8 +22,26 @@
 .form {
   width: 760px;
 }
-
+}
 /* Home page */
+.dashboard-container
+{
+  display: flex;
+
+.sidebar-close
+{
+  color: white;
+  text-decoration: "none";
+  font-size: 20px;
+  padding: 5px 0px 20px 5px;
+}
+.sidebar-open
+{
+  background: none;
+  border: none;
+  color: black;
+  padding-left: 30px,
+}
 .dropdown-toggle {
   display: flex;
   align-items: center;
@@ -49,12 +67,6 @@
   z-index: 1000;
 }
 
-.card {
-  background-color: #4e8cff;
-  flex: 1 1 calc(25% - 20px);
-  /* By default, each card takes 25% width */
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .card-container {
@@ -62,8 +74,14 @@
   flex-wrap: wrap;
   gap: 22px;
   margin: 20px;
-}
 
+.card {
+  background-color: #4e8cff;
+  flex: 1 1 calc(25% - 20px);
+  /* By default, each card takes 25% width */
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 @media (max-width: 208px) {
   .card {
     flex: 1 1 calc(35% - 20px); /* Cards will take 50% width on medium screens */
@@ -75,6 +93,17 @@
     flex: 1 1 80%; /* Cards will stack on top of each other on small screens */
   }
 }
+}
+.chart-container
+{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  align-items: flex-start;
+  margin-top: 40px;
+ 
+
+
 .chart {
   flex: 1 1 calc(35% - 20px);
   height: 400px;
@@ -93,6 +122,7 @@
     flex: 1 1 100%;
   }
 }
+}
 /* User page */
 .user-table {
   margin: 0px 20px 20px 30px;
@@ -100,20 +130,14 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   width: 96%;
 }
-.add-user-btn {
+.add-user-btn, .cancel-user-btn {
   background-color: #4e8cff;
   width: 180px;
   margin: 20px 30px 20px 20px;
   border-radius: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-.cancel-user-btn {
-  background-color: #4e8cff;
-  width: 180px;
-  margin: 20px 30px 20px 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+
 /* Adduser Page */
 .add-user-form {
   width: 900px;

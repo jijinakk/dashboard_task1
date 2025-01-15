@@ -1,9 +1,10 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useState, useContext } from "react";
-import { userContext } from "../App";
+
 import { useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import {userContext} from  "./UserContext";
 
 function AddUser() {
   const [formInput, setFormInput] = useState({
@@ -30,9 +31,12 @@ function AddUser() {
     e.preventDefault();
     const userid = users.length + 1;
     const newInput = { ...formInput,id: userid };
-    const newUsers = [...users, newInput];
-    console.log(newUsers);
-    setUsers(newUsers);
+    const newUser =[...users,newInput];
+    setUsers(newUser);
+    console.log(newUser);
+    toast.success("User added successfully");
+    navigate("/dashboard/users");
+
     navigate("/dashboard/users");
   };
   const handleCancel = () => {
@@ -177,7 +181,6 @@ function AddUser() {
       </Button>
     </div>
   </Form>
-  <ToastContainer />
 </div>
     </div>
   );

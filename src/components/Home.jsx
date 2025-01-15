@@ -3,7 +3,8 @@ import Card from "react-bootstrap/Card";
 import MostSellingCategories from "./MostSellingChart";
 import Customerschart from "./Customerschart";
 import Saleschart from "./Saleschart";
-import { userContext } from "../App";
+import {userContext} from  "./UserContext";
+import UserContext from "./UserContext";
 
 const Home = () => {
   const { users } = useContext(userContext);
@@ -43,13 +44,7 @@ const Home = () => {
         </Card>
       </div>
       <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          gap: "30px",
-          alignItems: "flex-start",
-          marginTop: "40px",
-        }}
+        className="chart-container"
       >
         {/* LineChart on the left */}
         <div className=" chart ">

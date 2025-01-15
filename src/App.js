@@ -7,63 +7,28 @@ import { useState, useEffect, createContext } from "react";
 
 import RouteConfig from "./components/RouteConfig";
 import axios from "axios";
+import { ToastContainer } from "react-toastify";
+import {UserContext} from "./components/UserContext";
 
-const userContext = createContext();
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [users, setUsers] = useState([]);
-  const [loggedInUser, setLoggedInUser] = useState([]);
-  // Check localStorage for authentication status
-  const getUserApi = async () => {
-    try {
-      const res = await axios.get("https://dummyjson.com/users");
-      setUsers(res.data.users);
-      console.log(res.data.users);
-      const authStatus = localStorage.getItem("isAuthenticated");
-      const user = JSON.parse(localStorage.getItem("user"));
-
-      console.log("authStatus", authStatus);
-      if (authStatus === "true") {
-        setIsAuthenticated(true);
-        // console.log(isAuthenticated);
-        setLoggedInUser(user);
-        // console.log(user);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  useEffect(() => {
-    getUserApi();
-  }, []);
-  // useEffect(() => {
-  //   console.log("App isAuthenticated:", isAuthenticated);
-  // }, [isAuthenticated]);
-
+  
+  
+  
+    
   return (
     <div className="app-container">
       <main>
-        <userContext.Provider
-          value={{
-            loggedInUser,
-            setLoggedInUser,
-            users,
-            setIsAuthenticated,
-            setUsers,
-          }}
-        >
+        <UserContext>
+        <ToastContainer position="top-center" autoClose={2000} theme="colored"/>
+
           <Router>
             <RouteConfig
-              isAuthenticated={isAuthenticated}
-              setIsAuthenticated={setIsAuthenticated}
+              
             />
           </Router>
-        </userContext.Provider>
-      </main>
+          </UserContext>      </main>
     </div>
   );
 }
 
 export default App;
-export { userContext };

@@ -1,4 +1,4 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext,useEffect} from "react";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 import { Button, Modal, Form } from "react-bootstrap";
@@ -6,17 +6,30 @@ import { TiPlus } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { userContext } from "../App";
 import { IoEye } from "react-icons/io5";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import {  Row, Col } from "react-bootstrap";
+import axios from "axios";
+import UserContext from "./UserContext";
+import {userContext} from  "./UserContext";
+
 
 const Users = () => {
-  //   useEffect(() => {
-  //     console.log(users);
-  //   });
-  const { users, setUsers, loggedInUser } =
+  const { users, setUsers } =
     useContext(userContext);
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("https://dummyjson.com/users");
+        setUsers(res.data.users);
+        console.log("rer");
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchUsers();
+    }, []);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -40,20 +53,20 @@ const Users = () => {
     username: "",
     password: "",
   });
-  const filteredUsers = users?.filter((user) => user.id !== loggedInUser.id);
-  console.log(filteredUsers);
+  // const filteredUsers = users?.filter((user) => user.id !== loggedInUser.id);
+  // console.log(filteredUsers);
 
   const handleAddUser = () => {
     navigate("/dashboard/adduser");
   };
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = Array.isArray(users)?users.slice(indexOfFirstItem, indexOfLastItem):[];
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const totalPages = Math.ceil(users.length / itemsPerPage);
   const paginationItem = [];
   for (let i = 1; i <= totalPages; i++) {
     paginationItem.push(
@@ -111,11 +124,7 @@ const Users = () => {
     console.log(updateduser);
     setUsers(updateduser);
     setShowEditModal(false);
-    toast.info("User Details Updated", {
-      position: "top-center",
-      autoClose: 3000,
-      theme: "colored",
-    });
+    toast.info("User Details Updated");
 
     // setFormInput((use)=>use.map((users)=>
     //    users.id=formInput.id?formInput:users
@@ -132,11 +141,7 @@ const Users = () => {
     console.log(deleteduser);
     setUsers(deleteduser);
     setShowDeleteModal(false);
-    toast.warn("User Details Deleted", {
-      position: "top-center",
-      autoClose: 3000,
-      theme: "colored",
-    });
+    toast.warn("User Details Deleted");
   };
   return (
     <div>
@@ -312,7 +317,7 @@ const Users = () => {
                   className="user-profile-input"
                   type="text"
                   name="country"
-                  value={loggedInUser?.address?.country || " ----"}
+                  value={formInput.country || " ----"}
                   placeholder="Enter Country"
                 />
               </Form.Group>
@@ -324,7 +329,7 @@ const Users = () => {
                   className="user-profile-input"
                   type="text"
                   name="state"
-                  value={loggedInUser?.address?.state || " ----"}
+                  value={formInput.state || " ----"}
                   placeholder="Enter Your State"
                 />
               </Form.Group>
@@ -336,7 +341,7 @@ const Users = () => {
                   className="user-profile-input"
                   type="text"
                   name="postal"
-                  value={loggedInUser?.address?.postalCode}
+                  value={formInput.postalCode}
                   placeholder="Enter Your Postal Code"
                 />
               </Form.Group>
@@ -523,7 +528,7 @@ const Users = () => {
         type="submit"
         className="add-user-btn"
       >
-        Edit
+        Update
       </Button>
     </div>
   </Form>
@@ -546,7 +551,6 @@ const Users = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer />
     </div>
   );
 };

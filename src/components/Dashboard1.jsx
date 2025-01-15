@@ -20,7 +20,7 @@ import { Link, Outlet } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Dropdown, DropdownMenu } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
-import { userContext } from "../App";
+import {userContext} from  "./UserContext";
 
 const Dashboard = () => {
   const { setIsAuthenticated,loggedInUser} = useContext(userContext);
@@ -68,7 +68,7 @@ const Dashboard = () => {
     navigate("users");
   };
   return (
-    <div style={{ display: "flex" }}>
+    <div className="dashboard-container">
       {/* Sidebar */}
       <div
         className={`sidebar ${showSidebar ? "show" : "hide"}`}
@@ -81,23 +81,17 @@ const Dashboard = () => {
           height: "100vh",
         }}
       >
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", justifyContent: "space-between" ,padding: "10px 0px 0px 5px" }}>
           <h2
             className="fw-bold fst-italic text-white"
-            style={{ padding: "10px 0px 30px 5px" }}
+            style={{  }}
           >
             Shopy
           </h2>
           <Button
             variant="link"
             onClick={toggleSidebar}
-            style={{
-              color: "white",
-              textDecoration: "none",
-              fontSize: "30px",
-              position: "relative",
-              padding: "10px 0px 30px 5px",
-            }}
+            className="sidebar-close"
           >
             <MdClose />
           </Button>
@@ -132,11 +126,9 @@ const Dashboard = () => {
         <Navbar expand="lg" className="bg-light">
           <Button
             onClick={toggleSidebar}
+            className="sidebar-open"
             style={{
-              background: "none",
-              border: "none",
-              color: "black",
-              paddingLeft: "30px",
+              
               visibility: showSidebar ? "hidden" : "visible",
             }}
           >
@@ -175,7 +167,7 @@ const Dashboard = () => {
             </div>
           </Navbar.Collapse>
         </Navbar>
-        <div><Outlet /></div>
+        <div ><Outlet /></div>
          {/* Child components will render here based on the route */}
       </div>
     </div>

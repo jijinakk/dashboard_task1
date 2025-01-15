@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Login from "./Login";
 import UserProfile from "./UserProfile";
 import Product from "./Product";
@@ -12,7 +12,10 @@ import {
 } from "react-router-dom";
 import AddUser from "./AddUser";
 import Users from "./Users";
-const ProtectedRoute = ({ children,isAuthenticated,loggedInUser}) => {
+import UserContext from "./UserContext";
+import {userContext} from  "./UserContext";
+const ProtectedRoute = ({ children,}) => {
+    const {isAuthenticated} =useContext(userContext);
     console.log(isAuthenticated);
     return isAuthenticated ? children : <Navigate to="/" />;
    
