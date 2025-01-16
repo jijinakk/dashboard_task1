@@ -33,7 +33,8 @@ const Dashboard = () => {
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated"); // Clear authentication state
     localStorage.removeItem("user");
-    localStorage.removeItem("loggedInUser"); // Optionally remove user details
+    localStorage.removeItem("loggedInUser");
+    localStorage.removeItem("token") // Optionally remove user details
     setIsAuthenticated(false); // Set authentication state to false
     navigate("/"); // Redirect to login page
   };

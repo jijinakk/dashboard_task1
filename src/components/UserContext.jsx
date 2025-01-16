@@ -4,10 +4,11 @@ import { useState, useEffect, createContext } from "react";
 const userContext = createContext();
 
 const UserContext = ({children}) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const [isAuthenticated, setIsAuthenticated] = useState("")
+    useEffect(() => {
         const token = localStorage.getItem("token");
-        return token ? true : null;
-      });
+        setIsAuthenticated(token ? true : false);
+      }, []);
       const [users, setUsers] = useState([]);
       const [loggedInUser, setLoggedInUser] = useState(() => {
         const user = localStorage.getItem("user");

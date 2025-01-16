@@ -14,13 +14,13 @@ import AddUser from "./AddUser";
 import Users from "./Users";
 import UserContext from "./UserContext";
 import {userContext} from  "./UserContext";
-const ProtectedRoute = ({ children,}) => {
+const ProtectedRoute = ({ children}) => {
     const {isAuthenticated} =useContext(userContext);
     console.log(isAuthenticated);
     return isAuthenticated ? children : <Navigate to="/" />;
    
   };
-const RouteConfig = ({ isAuthenticated,loggedInUser }) => {
+const RouteConfig = () => {
    
   
   return (
@@ -29,7 +29,7 @@ const RouteConfig = ({ isAuthenticated,loggedInUser }) => {
         <Route
           path="/dashboard"
           element={
-            <ProtectedRoute isAuthenticated={isAuthenticated} loggedInUser={loggedInUser}>
+            <ProtectedRoute  >
               <Dashboard />
             </ProtectedRoute>
           }

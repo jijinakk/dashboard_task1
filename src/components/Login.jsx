@@ -5,40 +5,59 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext,useEffect} from "react";
-import {userContext} from  "./UserContext";
-import {  toast } from "react-toastify";
+import { useState, useContext, useEffect } from "react";
+import { userContext } from "./UserContext";
+import { toast } from "react-toastify";
 import UserContext from "./UserContext";
 
 const Login = () => {
-  const { setIsAuthenticated, setUsers } = useContext(userContext);
-  const [username, setUsername] = useState("");
+  const { setIsAuthenticated, setLoggedInUser, isAuthenticated } =
+    useContext(userContext);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-      const response = await axios.post('https://dummyjson.com/user/login',{username,password});
-      const {accessToken} =response.data;
-      console.log("res",response.data);
-      localStorage.setItem("token",accessToken);
-      const userresponse = await axios.get('https://dummyjson.com/user/me',{
-        headers:{
-          Authorization:`Bearer ${accessToken}`
-        }
-      })
-      const userDetails =userresponse.data;
-      localStorage.setItem("user",JSON.stringify(userDetails));
-      setIsAuthenticated(true);
-      setUsers([userDetails]);
-      toast.success("Login Successful")
-      navigate("/dashboard");
+    let formData = new FormData();
+    formData.append("Email", email);
+    formData.append("password", password);
+    try {
+      const response = await axios({
+        method: "post",
+        url: "https://api.escuelajs.co/api/v1/auth/login",
+        headers: { "Content-Type": "application/json", Authorization: undefined },
+        data: {
+          email: email,
+          password: password,
+        },
+      });
+      const { access_token} = response.data;
+      console.log("res", response.data);
 
-    }catch(error)
-    {
-      console.error("Login Failed:",error);
+      localStorage.setItem("token", access_token
+      );
+      setIsAuthenticated(true);
+      localStorage.setItem("isAuthenticated", isAuthenticated);
+      const userprofile = await axios.get("https://api.escuelajs.co/api/v1/auth/profile",{
+        headers:{
+            Authorization:`Bearer ${access_token}`
+        },
+      });
+      const userDetails = userprofile.data;
+      localStorage.setItem("user", JSON.stringify(userDetails)
+      // const userresponse = await axios.get(" https://api.escuelajs.co/api/v1/auth/profile", {
+      //   headers: {
+      //     Authorization: `Bearer ${accessToken}`,
+      //   },
+      // });
+      );
+
+      // setLoggedInUser(userDetails);
+      toast.success("Login Successful");
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login Failed:", error);
       alert("invalid");
     }
   };
@@ -48,13 +67,13 @@ const Login = () => {
       <Form onSubmit={handleSubmit} className="form">
         <Form.Group as={Row} className="mb-3 ">
           <Form.Label column sm={2}>
-            Username
+            Email
           </Form.Label>
           <Col sm={5}>
             <Form.Control
               placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)} // Update email state
+              value={email}
+              onChange={(e) => setEmail(e.target.value)} // Update email state
               required
             />
           </Col>
