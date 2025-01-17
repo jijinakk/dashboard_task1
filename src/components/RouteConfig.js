@@ -1,51 +1,43 @@
-import React, { useContext } from "react";
+import React, { useContext } from "react"; // Top-level imports
 import Login from "./Login";
-import UserProfile from "./UserProfile";
+import UserProfile from "./User/UserProfile";
 import Product from "./Product";
-import Home from "./Home";
-import Dashboard from "./Dashboard1";
-import {
-  Routes,
-  Route,
-  Navigate,
- 
-} from "react-router-dom";
-import AddUser from "./AddUser";
-import Users from "./Users";
-import UserContext from "./UserContext";
-import {userContext} from  "./UserContext";
-const ProtectedRoute = ({ children}) => {
-    const {isAuthenticated} =useContext(userContext);
-    console.log(isAuthenticated);
-    return isAuthenticated ? children : <Navigate to="/" />;
-   
-  };
-const RouteConfig = () => {
-   
-  
-  return (
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute  >
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Home />} />
-          <Route path="home" element={<Home />} /> {/* Correct relative path */}
-          <Route path="product" element={<Product />} />{" "}
-          {/* Correct relative path */}
-          <Route path="users" element={<Users />} />
-          <Route path="userprofile" element={<UserProfile />} />
-          <Route path="adduser" element={<AddUser />} />
-        </Route>
-        
+import Home from "./Home/Home";
+import DashboardNew from "./Navigation/Dashboard";
+import AddUser from "./User/AddUser";
+import Users from "./User/Users";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { userContext } from "./UserContext"; // Import Context
 
-        {/* Add more routes as needed */}
-      </Routes>
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useContext(userContext);
+  return isAuthenticated ? children : <Navigate to="/login" />;
+};
+
+const RouteConfig = () => {
+  return (
+    <Routes>
+      {/* Login Route */}
+      <Route path="/login" element={<Login />} />
+
+      {/* Protected Routes */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <DashboardNew />
+          </ProtectedRoute>
+        }
+      >
+        {/* Child Routes */}
+        <Route index element={<Home />} /> {/* Default route */}
+        <Route path="home" element={<Home />} />
+        <Route path="product" element={<Product />} />
+        <Route path="users" element={<Users />} />
+        <Route path="userprofile" element={<UserProfile />} />
+        <Route path="adduser" element={<AddUser />} />
+      </Route>
+    </Routes>
   );
 };
 

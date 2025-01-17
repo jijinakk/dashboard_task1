@@ -10,8 +10,8 @@ import { IoEye } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { Row, Col } from "react-bootstrap";
 import axios from "axios";
-import UserContext from "./UserContext";
-import { userContext } from "./UserContext";
+import UserContext from "../UserContext";
+import { userContext } from "../UserContext";
 import useFormInput from "./useFormInput";
 
 
@@ -26,7 +26,7 @@ const Users = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationItems, setPaginationItems] = useState([]);
 
-  const itemsPerPage = 14;
+  const itemsPerPage = 10;
   const navigate = useNavigate();
 
  const fetchUsers = async () => {
@@ -45,7 +45,8 @@ const Users = () => {
     fetchUsers();
   }, []);
   const handleAddUser = () => {
-    navigate("/dashboard/adduser");
+    console.log("Add User");
+    navigate("/adduser");
   };
 
   const handlePageChange = (page) => {
@@ -67,26 +68,19 @@ const Users = () => {
     }
     setPaginationItems(paginationItems);
   }, [currentPage, users]);
+
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Array.isArray(users)
-    ? users.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
+  const currentItems = Array.isArray(users)?users.slice(indexOfFirstItem, indexOfLastItem):[]// Reverse to show the newest users first
+;
   const handleAction = (users, actionType) => {
     setFormInput({
       id: users.id,
-      img: users?.image,
-      firstName: users.firstName,
-      lastName: users.lastName,
-      company: users.name,
-      phone: users.phone,
+      avatar: users?.avatar,
+      name: users.name,
       email: users.email,
-      birthdate: users.birthDate,
       role: users.role,
-      country: users.address?.country || users.country || "",
-      state: users.address?.state || users.state || "",
-      postalCode: users.address?.postalCode || users.postalCode || "",
-      username: users.username,
       password: users.password,
     });
 
@@ -130,6 +124,9 @@ const Users = () => {
     setShowDeleteModal(false);
     toast.warn("User Details Deleted");
   };
+  const test = () => {  
+    console.log("test");
+  }
   return (
     <div>
       <div className="d-flex justify-content-end">
@@ -143,14 +140,13 @@ const Users = () => {
           Add User
         </Button>
       </div>
-      <Table responsive hover className="user-table">
+      <div className="justify-content-center user-table-container">
+      <Table responsive hover className="user-table border" striped>
         <thead>
           <tr>
             <th>ID</th>
             <th>Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Phone</th>
+            <th>Email</th> 
             <th>Action</th>
           </tr>
         </thead>
@@ -159,11 +155,9 @@ const Users = () => {
             <tr>
               <td>{user.id}</td>
               <td>
-                {user.firstName} {user.lastName}
+                {user.name} 
               </td>
-              <td>{user.username}</td>
               <td>{user.email}</td>
-              <td>{user.phone}</td>
               <td>
                 <IoEye onClick={() => handleAction(user, "view")} />{" "}
                 <FaEdit onClick={() => handleAction(user, "edit")} />{" "}
@@ -173,6 +167,7 @@ const Users = () => {
           ))}
         </tbody>
       </Table>
+      </div>
       <Pagination className="justify-content-center">
         {paginationItems}
       </Pagination>
@@ -180,7 +175,7 @@ const Users = () => {
       <Modal
         show={showViewModal}
         onHide={() => setShowViewModal(false)}
-        size="xl"
+        size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
@@ -192,19 +187,16 @@ const Users = () => {
         <Modal.Body>
           <div>
             <div className="user-profile-container">
-              <Row className="mb-2">
-                <Col md={2}>
-                  <img src={formInput.img || " Image"} alt="img" />
+              <Row className="mb-4">
+                <Col md={6}>
+                  <img src={formInput.avatar || " Image"} alt="img"  style={{ width: "200px", height: "200px", objectFit: "cover" }}/>
                 </Col>
-                <Col md={2}>
+                <Col md={4}>
                   <h5>
-                    {formInput.firstName} {formInput.lastName}
+                    {formInput.name} 
                   </h5>
                   <h6>{formInput.role}</h6>
-                  <h6>
-                    {formInput?.company?.title || " --"},
-                    {formInput?.company?.name || " "}
-                  </h6>
+                  
                 </Col>
               </Row>
             </div>
@@ -212,43 +204,23 @@ const Users = () => {
               <Form>
                 <Row className="mb-3">
                   <Col md={4}>
-                    <h4>Personal Details</h4>
+                    <h4>Details</h4>
                   </Col>
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}>
                     <Form.Group controlId="formfirstname">
-                      <Form.Label>First Name</Form.Label>
+                      <Form.Label> Name</Form.Label>
                       <Form.Control
                         className="user-profile-input"
                         type="text"
-                        name="firstName"
-                        value={formInput?.firstName || " --- "}
+                        name="name"
+                        value={formInput?.name || " --- "}
                       />
                     </Form.Group>
                   </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="formlastname">
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="lastName"
-                        value={formInput?.lastName || "--- "}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="formdateOfBirth">
-                      <Form.Label>Date Of Birth</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="dateOfBirth"
-                        value={formInput?.birthdate || "--- "}
-                      />
-                    </Form.Group>
-                  </Col>
+                
+                 
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}>
@@ -262,17 +234,7 @@ const Users = () => {
                       />
                     </Form.Group>
                   </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="formPhone">
-                      <Form.Label>Phone</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="phone"
-                        value={formInput?.phone || "---- "}
-                      />
-                    </Form.Group>
-                  </Col>
+                  
                   <Col md={4}>
                     <Form.Group controlId="formRole">
                       <Form.Label>Role</Form.Label>
@@ -281,54 +243,6 @@ const Users = () => {
                         type="text"
                         name="role"
                         value={formInput?.role || " ----"}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Form>
-            </div>
-
-            <div className="user-profile-container mt-4">
-              <Form>
-                <Row className="mb-3">
-                  <Col md={4}>
-                    <h4>Address</h4>
-                  </Col>
-                </Row>
-                <Row className="mb-3">
-                  <Col md={4}>
-                    <Form.Group controlId="formCountry">
-                      <Form.Label>Country</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="country"
-                        value={formInput.country || " ----"}
-                        placeholder="Enter Country"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="formState">
-                      <Form.Label>State</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="state"
-                        value={formInput.state || " ----"}
-                        placeholder="Enter Your State"
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={4}>
-                    <Form.Group controlId="formPostal">
-                      <Form.Label>Postal Code</Form.Label>
-                      <Form.Control
-                        className="user-profile-input"
-                        type="text"
-                        name="postal"
-                        value={formInput.postalCode}
-                        placeholder="Enter Your Postal Code"
                       />
                     </Form.Group>
                   </Col>
@@ -358,54 +272,45 @@ const Users = () => {
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">
-                    First Name
+                    Name
                   </Form.Label>
                   <div className="col-sm-8">
                     <Form.Control
                       type="text"
-                      name="firstName"
-                      value={formInput.firstName}
+                      name="name"
+                      value={formInput.name}
                       onChange={handleChange}
                       placeholder="Enter First Name"
                     />
                   </div>
                 </div>
               </Form.Group>
+              
+              
+              <Form.Group className="mb-3" controlId="formRole">
+            <div className="row">
+              <Form.Label className="col-sm-4 col-form-label text-start">
+                Role *
+              </Form.Label>
+              <div className="col-sm-8">
+                <Form.Select
+                   type="text"
+                   name="role"
+                   value={formInput.role}
+                   onChange={handleChange}
+                   placeholder="Enter Role"
+                >
+                  <option value="">Select Role</option>
+                  <option value="admin">Admin</option>
+                  <option value="customer">customer</option>
+                </Form.Select>
+              </div>
+            </div>
+          </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">
-                    Last Name
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="lastName"
-                      value={formInput.lastName}
-                      onChange={handleChange}
-                      placeholder="Enter Last Name"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formPhone">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Phone
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="phone"
-                      value={formInput.phone}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Email address
+                    Email
                   </Form.Label>
                   <div className="col-sm-8">
                     <Form.Control
@@ -418,96 +323,21 @@ const Users = () => {
                   </div>
                 </div>
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formdob">
+              
+              
+              
+             
+             
+              <Form.Group className="mb-3" controlId="formAvatar">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">
-                    Date of Birth
+                    Avatar
                   </Form.Label>
                   <div className="col-sm-8">
                     <Form.Control
                       type="text"
-                      name="birthdate"
-                      value={formInput.birthdate}
-                      onChange={handleChange}
-                      placeholder="Enter Date of Birth"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formRole">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Role
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="role"
-                      value={formInput.role}
-                      onChange={handleChange}
-                      placeholder="Enter Role"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formCountry">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Country
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="country"
-                      value={formInput.country}
-                      onChange={handleChange}
-                      placeholder="Enter Country"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formstate">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    State
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="state"
-                      value={formInput.state}
-                      onChange={handleChange}
-                      placeholder="Enter State"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formpostal">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Postal Code
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="postalCode"
-                      value={formInput.postalCode}
-                      onChange={handleChange}
-                      placeholder="Enter Postal Code"
-                    />
-                  </div>
-                </div>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formUsername">
-                <div className="row">
-                  <Form.Label className="col-sm-4 col-form-label text-start">
-                    Username
-                  </Form.Label>
-                  <div className="col-sm-8">
-                    <Form.Control
-                      type="text"
-                      name="username"
-                      value={formInput.username}
+                      name="avatar"
+                      value={formInput.avatar}
                       onChange={handleChange}
                       placeholder="Enter username"
                     />

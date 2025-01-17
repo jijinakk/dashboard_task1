@@ -4,7 +4,7 @@ import { useState, useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { userContext } from "./UserContext";
+import { userContext } from "../UserContext";
 import axios from "axios";
 import useFormInput from "./useFormInput";
 function AddUser() {
@@ -30,8 +30,8 @@ function AddUser() {
       console.log("API response:", response);
 
       if (response.status === 201 || response.status === 200) {
-        const newUser = [response.data, ...users];
-        setUsers(newUser);
+        const newUser = [response.data, ...users]; // Add new user at the beginning
+        setUsers([...newUser]);
         console.log("New user added:", newUser);
         toast.success("User added successfully");
 
@@ -60,77 +60,15 @@ function AddUser() {
           <Form.Group className="mb-3" controlId="formfirstname">
             <div className="row">
               <Form.Label className="col-sm-4 col-form-label text-start">
-                First Name *
+                 Name *
               </Form.Label>
               <div className="col-sm-8">
                 <Form.Control
                   type="text"
                   name="name"
-                  placeholder="Enter First Name"
+                  placeholder="Enter the Name"
                   onChange={getFormInput}
                   required
-                />
-              </div>
-            </div>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formlastname">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Last Name *
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Control
-                  type="text"
-                  name="lastName"
-                  placeholder="Enter Last Name"
-                  onChange={getFormInput}
-                  required
-                />
-              </div>
-            </div>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formphone">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Phone *
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Control
-                  type="text"
-                  name="phone"
-                  placeholder="Enter your phone number"
-                  onChange={getFormInput}
-                />
-              </div>
-            </div>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Email address *
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Control
-                  type="email"
-                  name="email"
-                  placeholder="Enter email"
-                  onChange={getFormInput}
-                  required
-                />
-              </div>
-            </div>
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="formdob">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Date of Birth
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Control
-                  type="date"
-                  name="dob"
-                  placeholder="Enter Date of Birth"
-                  onChange={getFormInput}
                 />
               </div>
             </div>
@@ -148,12 +86,30 @@ function AddUser() {
                 >
                   <option value="">Select Role</option>
                   <option value="admin">Admin</option>
-                  <option value="user">User</option>
-                  <option value="moderator">Moderator</option>
+                  <option value="customer">customer</option>
                 </Form.Select>
               </div>
             </div>
           </Form.Group>
+         
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <div className="row">
+              <Form.Label className="col-sm-4 col-form-label text-start">
+                Email *
+              </Form.Label>
+              <div className="col-sm-8">
+                <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="Enter email"
+                  onChange={getFormInput}
+                  required
+                />
+              </div>
+            </div>
+          </Form.Group>
+          
+         
           <Form.Group className="mb-3" controlId="formCountry">
             <div className="row">
               <Form.Label className="col-sm-4 col-form-label text-start">
@@ -169,22 +125,7 @@ function AddUser() {
               </div>
             </div>
           </Form.Group>
-          <Form.Group className="mb-3" controlId="formusername">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Username *
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Control
-                  type="text"
-                  name="username"
-                  placeholder="Enter username"
-                  onChange={getFormInput}
-                  required
-                />
-              </div>
-            </div>
-          </Form.Group>
+          
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <div className="row">
               <Form.Label className="col-sm-4 col-form-label text-start">

@@ -3,8 +3,8 @@ import Card from "react-bootstrap/Card";
 import MostSellingCategories from "./MostSellingChart";
 import Customerschart from "./Customerschart";
 import Saleschart from "./Saleschart";
-import {userContext} from  "./UserContext";
-import UserContext from "./UserContext";
+import {userContext} from  "../UserContext";
+import UserContext from "../UserContext";
 
 const Home = () => {
   const { users } = useContext(userContext);

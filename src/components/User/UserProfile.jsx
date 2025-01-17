@@ -1,8 +1,7 @@
 import React from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import { useContext } from "react";
-import UserContext from "./UserContext";
-import {userContext} from  "./UserContext";
+import { userContext } from "../UserContext";
 
 const UserProfile = () => {
   const {  loggedInUser } = useContext(userContext);

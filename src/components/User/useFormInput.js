@@ -6,15 +6,9 @@ const useFormInput = () => {
   const [formInput, setFormInput] = useState({
     id: "",
     name: "",
-    lastName: "",
-    phone: "",
     email: "",
-    birthdate: "",
     role: "",
     avatar: "",
-    state: "",
-    postalCode: "",
-    username: "",
     password: "",
   });
 

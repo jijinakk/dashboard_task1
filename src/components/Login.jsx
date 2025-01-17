@@ -35,8 +35,7 @@ const Login = () => {
       const { access_token} = response.data;
       console.log("res", response.data);
 
-      localStorage.setItem("token", access_token
-      );
+      localStorage.setItem("token", access_token );
       setIsAuthenticated(true);
       localStorage.setItem("isAuthenticated", isAuthenticated);
       const userprofile = await axios.get("https://api.escuelajs.co/api/v1/auth/profile",{
@@ -45,17 +44,18 @@ const Login = () => {
         },
       });
       const userDetails = userprofile.data;
-      localStorage.setItem("user", JSON.stringify(userDetails)
+      localStorage.setItem("user", JSON.stringify(userDetails));
+      setLoggedInUser(userDetails);
+
       // const userresponse = await axios.get(" https://api.escuelajs.co/api/v1/auth/profile", {
       //   headers: {
       //     Authorization: `Bearer ${accessToken}`,
       //   },
       // });
-      );
+      
 
-      // setLoggedInUser(userDetails);
       toast.success("Login Successful");
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       console.error("Login Failed:", error);
       alert("invalid");
