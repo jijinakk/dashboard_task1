@@ -3,12 +3,12 @@ import Card from "react-bootstrap/Card";
 import MostSellingCategories from "./MostSellingChart";
 import Customerschart from "./Customerschart";
 import Saleschart from "./Saleschart";
-import {userContext} from  "../UserContext";
-import UserContext from "../UserContext";
+import { userContext } from "../UserContext";
 
 const Home = () => {
   const { users } = useContext(userContext);
   const newUsers = users?.length;
+
   return (
     <div style={{ padding: "30px" }}>
       <div className="card-container">
@@ -43,9 +43,7 @@ const Home = () => {
           </Card.Body>
         </Card>
       </div>
-      <div
-        className="chart-container"
-      >
+      <div className="chart-container">
         {/* LineChart on the left */}
         <div className=" chart ">
           <Saleschart />

@@ -3,21 +3,18 @@ import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 import { Button, Modal, Form } from "react-bootstrap";
 import { TiPlus } from "react-icons/ti";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { IoEye } from "react-icons/io5";
 import { toast } from "react-toastify";
 import { Row, Col } from "react-bootstrap";
-import axios from "axios";
-import UserContext from "../UserContext";
 import { userContext } from "../UserContext";
 import useFormInput from "./useFormInput";
-
+import axiosInstance from "../axiosInstance";
 
 const Users = () => {
-
-  const {formInput,setFormInput}=useFormInput();
+  const { formInput, setFormInput } = useFormInput();
   const { users, setUsers } = useContext(userContext);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -27,29 +24,30 @@ const Users = () => {
   const [paginationItems, setPaginationItems] = useState([]);
 
   const itemsPerPage = 10;
-  const navigate = useNavigate();
 
- const fetchUsers = async () => {
+  const fetchUsers = async () => {
     try {
-      const res = await axios.get("https://api.escuelajs.co/api/v1/users");
-      console.log(res.data);
+      const res = await   axiosInstance.get("/users");
       setUsers(res.data);
-      console.log(users);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
   };
 
   useEffect(() => {
-   
     fetchUsers();
+    const savedPage = localStorage.getItem('currentPage');
+    if (savedPage) {
+      setCurrentPage(Number(savedPage)); // Set page from localStorage
+    } else {
+      setCurrentPage(1); // Default to page 1 if no saved page
+    }
   }, []);
-  const handleAddUser = () => {
-    console.log("Add User");
-    navigate("/adduser");
-  };
+  
 
   const handlePageChange = (page) => {
+    localStorage.setItem('currentPage', page); // Save current page to localStorage
+
     setCurrentPage(page);
   };
   useEffect(() => {
@@ -68,12 +66,9 @@ const Users = () => {
     }
     setPaginationItems(paginationItems);
   }, [currentPage, users]);
-
-  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = Array.isArray(users)?users.slice(indexOfFirstItem, indexOfLastItem):[]// Reverse to show the newest users first
-;
+  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
   const handleAction = (users, actionType) => {
     setFormInput({
       id: users.id,
@@ -97,76 +92,93 @@ const Users = () => {
     console.log({ name }, { value });
     setFormInput({ ...formInput, [name]: value });
   };
-  const handleEditSubmit = (e) => {
+  const handleEditSubmit = async (e) => {
     e.preventDefault();
-    const updateduser = users.map((user) =>
-      user.id === formInput.id ? formInput : user
-    );
-    console.log(updateduser);
-    setUsers(updateduser);
-    setShowEditModal(false);
-    toast.info("User Details Updated");
-
-    // setFormInput((use)=>use.map((users)=>
-    //    users.id=formInput.id?formInput:users
-    // ))
+  
+    try {
+      // Make an API call to update user details
+      const response = await axiosInstance.put(`/users/${formInput.id}`, formInput);
+  
+      if (response.status === 200) {
+        // Update the local state only if the API call is successful
+        const updatedUsers = users.map((user) =>
+          user.id === formInput.id ? response.data : user
+        );
+        setUsers(updatedUsers);
+        setShowEditModal(false);
+        toast.success("User details updated successfully");
+      }
+    } catch (error) {
+      // Handle any errors from the API call
+      console.error("Error updating user:", error);
+      toast.error("Failed to update user details. Please try again.");
+    }
   };
   const handleDelete = (user) => {
     setSelectedUser(user);
-    console.log(user);
     setShowDeleteModal(true);
   };
-  const handleDeleteUser = (e) => {
+  const handleDeleteUser = async (e) => {
     e.preventDefault();
-    const deleteduser = users.filter((users) => users.id !== selectedUser.id);
-    console.log(deleteduser);
-    setUsers(deleteduser);
-    setShowDeleteModal(false);
-    toast.warn("User Details Deleted");
+  
+    try {
+      // Make an API call to delete the user
+      const response = await axiosInstance.delete(`/users/${selectedUser.id}`);
+  
+      if (response.status === 200) {
+        // Update the local state by filtering out the deleted user
+        const updatedUsers = users.filter((user) => user.id !== selectedUser.id);
+        setUsers(updatedUsers);
+        setShowDeleteModal(false);
+        toast.warn("User details deleted successfully");
+      }
+    } catch (error) {
+      // Handle any errors from the API call
+      console.error("Error deleting user:", error);
+      toast.error("Failed to delete user. Please try again.");
+    }
   };
-  const test = () => {  
-    console.log("test");
-  }
+
   return (
     <div>
       <div className="d-flex justify-content-end">
+        <Link to="/adduser">
         <Button
           className="add-user-btn"
-          onClick={handleAddUser}
           variant="primary"
         >
           {" "}
           <TiPlus />
           Add User
         </Button>
+        </Link>
       </div>
+
       <div className="justify-content-center user-table-container">
-      <Table responsive hover className="user-table border" striped>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th> 
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentItems.map((user) => (
+        <Table responsive hover className="user-table border" striped>
+          <thead>
             <tr>
-              <td>{user.id}</td>
-              <td>
-                {user.name} 
-              </td>
-              <td>{user.email}</td>
-              <td>
-                <IoEye onClick={() => handleAction(user, "view")} />{" "}
-                <FaEdit onClick={() => handleAction(user, "edit")} />{" "}
-                <MdDelete onClick={() => handleDelete(user)} />
-              </td>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {currentItems.map((user) => (
+              <tr>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>
+                  <IoEye onClick={() => handleAction(user, "view")} />{" "}
+                  <FaEdit onClick={() => handleAction(user, "edit")} />{" "}
+                  <MdDelete onClick={() => handleDelete(user)} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </div>
       <Pagination className="justify-content-center">
         {paginationItems}
@@ -185,18 +197,22 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div>
             <div className="user-profile-container">
               <Row className="mb-4">
                 <Col md={6}>
-                  <img src={formInput.avatar || " Image"} alt="img"  style={{ width: "200px", height: "200px", objectFit: "cover" }}/>
+                  <img
+                    src={formInput.avatar || " Image"}
+                    alt="img"
+                    style={{
+                      width: "200px",
+                      height: "200px",
+                      objectFit: "cover",
+                    }}
+                  />
                 </Col>
                 <Col md={4}>
-                  <h5>
-                    {formInput.name} 
-                  </h5>
+                  <h5>{formInput.name}</h5>
                   <h6>{formInput.role}</h6>
-                  
                 </Col>
               </Row>
             </div>
@@ -219,8 +235,6 @@ const Users = () => {
                       />
                     </Form.Group>
                   </Col>
-                
-                 
                 </Row>
                 <Row className="mb-3">
                   <Col md={4}>
@@ -234,7 +248,7 @@ const Users = () => {
                       />
                     </Form.Group>
                   </Col>
-                  
+
                   <Col md={4}>
                     <Form.Group controlId="formRole">
                       <Form.Label>Role</Form.Label>
@@ -249,7 +263,6 @@ const Users = () => {
                 </Row>
               </Form>
             </div>
-          </div>
         </Modal.Body>
       </Modal>
       {/* Edit Modal */}
@@ -285,28 +298,27 @@ const Users = () => {
                   </div>
                 </div>
               </Form.Group>
-              
-              
+
               <Form.Group className="mb-3" controlId="formRole">
-            <div className="row">
-              <Form.Label className="col-sm-4 col-form-label text-start">
-                Role *
-              </Form.Label>
-              <div className="col-sm-8">
-                <Form.Select
-                   type="text"
-                   name="role"
-                   value={formInput.role}
-                   onChange={handleChange}
-                   placeholder="Enter Role"
-                >
-                  <option value="">Select Role</option>
-                  <option value="admin">Admin</option>
-                  <option value="customer">customer</option>
-                </Form.Select>
-              </div>
-            </div>
-          </Form.Group>
+                <div className="row">
+                  <Form.Label className="col-sm-4 col-form-label text-start">
+                    Role *
+                  </Form.Label>
+                  <div className="col-sm-8">
+                    <Form.Select
+                      type="text"
+                      name="role"
+                      value={formInput.role}
+                      onChange={handleChange}
+                      placeholder="Enter Role"
+                    >
+                      <option value="">Select Role</option>
+                      <option value="admin">Admin</option>
+                      <option value="customer">customer</option>
+                    </Form.Select>
+                  </div>
+                </div>
+              </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">
@@ -323,11 +335,7 @@ const Users = () => {
                   </div>
                 </div>
               </Form.Group>
-              
-              
-              
-             
-             
+
               <Form.Group className="mb-3" controlId="formAvatar">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">

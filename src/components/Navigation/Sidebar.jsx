@@ -1,91 +1,59 @@
-import React, { useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
 import Nav from "react-bootstrap/Nav";
-import Navbar from "react-bootstrap/Navbar";
-import {  IoBagOutline } from "react-icons/io5";
-import { IoIosNotifications } from "react-icons/io";
-import { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import { IoBagOutline } from "react-icons/io5";
+import { AiOutlineAntDesign } from "react-icons/ai";
 import {
   MdOutlineDashboardCustomize,
   MdOutlineInventory,
   MdOutlinePayments,
-  MdClose,
 } from "react-icons/md";
 import { GoPeople } from "react-icons/go";
 import { CiStar } from "react-icons/ci";
 import { LiaLinkSolid } from "react-icons/lia";
-import { Link, Outlet } from "react-router-dom";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { Dropdown, DropdownMenu } from "react-bootstrap";
-import { CgProfile } from "react-icons/cg";
-import {userContext} from  "../UserContext";
+import { useNavigate } from "react-router-dom";
+import { userContext } from "../UserContext";
 
 const Sidebar = () => {
-    const { setIsAuthenticated,loggedInUser,showSidebar,setShowSidebar} = useContext(userContext);
-          const navigate = useNavigate();
-          const toggleSidebar = () => setShowSidebar(!showSidebar);
-          let logoutTimer;
-          const userList = () => {
-            navigate("/users");
-          };
+  const { showSidebar } = useContext(userContext);
+  const navigate = useNavigate();
+  const menuItems = [
+    { to: "/home", icon: <MdOutlineDashboardCustomize />, label: "Home" },
+    { to: "/product", icon: <IoBagOutline />, label: "Product" },
+    { to: "/inventory", icon: <MdOutlineInventory />, label: "Inventory" },
+    { to: "/users", icon: <GoPeople />, label: "Users" },
+    { to: "/review", icon: <CiStar />, label: "Review" },
+    { to: "/payment", icon: <MdOutlinePayments />, label: "Payment" },
+    { to: "/integration", icon: <LiaLinkSolid />, label: "Integration" },
+  ];
+
+  const handleNavigation = (path) => {
+    navigate(path, { replace: true });
+  };
+
   return (
-    <div>
-      
-      <div
-        className={`sidebar ${showSidebar ? "show" : "hide"}`}
-        style={{
-          backgroundColor: "rgb(42, 156, 248)",
-          width: showSidebar ? "250px" : "0",
-          overflow: "hidden",
-          transition: "width 0.3s ease",
-          padding: showSidebar ? "10px" : "0",
-          height: "100vh",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between" ,padding: "10px 0px 0px 5px" }}>
-          <h2
-            className="fw-bold fst-italic text-white"
-           
-          >
-            Shopy
-          </h2>
-          <Button
-            variant="link"
-            onClick={toggleSidebar}
-            className="sidebar-close"
-          >
-            <MdClose />
-          </Button>
-        </div>
-        <Nav className="flex-column">
-          <Nav.Link as={Link} to="/home" className="mb-2 text-light">
-            <MdOutlineDashboardCustomize /> Home
-          </Nav.Link>
-          <Nav.Link as={Link} to="/product" className="mb-2 text-light">
-            <IoBagOutline /> Product
-          </Nav.Link>
-          <Nav.Link href="#Inventory" className="mb-2 text-light">
-            <MdOutlineInventory /> Inventory
-          </Nav.Link>
-          <Nav.Link onClick={userList} className="mb-2 text-light">
-            <GoPeople /> Users
-          </Nav.Link>
-          <Nav.Link href="#Review" className="mb-2 text-light">
-            <CiStar /> Review
-          </Nav.Link>
-          <Nav.Link href="#Payment" className="mb-2 text-light">
-            <MdOutlinePayments /> Payment
-          </Nav.Link>
-          <Nav.Link href="#Integration" className="mb-2 text-light">
-            <LiaLinkSolid /> Integration
-          </Nav.Link>
-        </Nav>
+    <div
+      className={`sidebar ${showSidebar ? "show" : "hide"}`}
+      style={{
+        backgroundColor: "rgb(42, 156, 248)"
+      }}
+    >
+      <div className="d-flex  align-items-center">
+        <AiOutlineAntDesign className="logo" />
+        <h2 className="fw-bold fst-italic text-white logo-text">Square</h2>
       </div>
-
+      <Nav className="flex-column">
+        {menuItems.map((item, index) => (
+          <Nav.Link
+            key={index}
+            onClick={() => handleNavigation(item.to)}
+            className="mb-2 text-light sidebar-icon"
+          >
+            {item.icon} <span className="sidebar-label">{item.label}</span>
+          </Nav.Link>
+        ))}
+      </Nav>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

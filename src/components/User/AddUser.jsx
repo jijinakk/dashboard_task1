@@ -1,60 +1,50 @@
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState, useContext } from "react";
+import {  useContext } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userContext } from "../UserContext";
-import axios from "axios";
 import useFormInput from "./useFormInput";
+import { Link } from "react-router-dom";
+import axiosInstance from "../axiosInstance";
 function AddUser() {
   const { formInput, setFormInput } = useFormInput();
   const { users, setUsers } = useContext(userContext);
   const navigate = useNavigate();
   const getFormInput = (e) => {
-    console.log(e.target.value);
     setFormInput({ ...formInput, [e.target.name]: e.target.value });
   };
+  
+  const checkEmailExists = (email) => {
+    return users.some((user) => user.email === email);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if the email already exists
+    if (checkEmailExists(formInput.email)) {
+      toast.error("Email already exists. Please use a different email.");
+      return;
+    }
+
     try {
       // Generate the new user data
       const userid = users.length + 1;
       const newInput = { ...formInput, id: userid };
-      console.log("Submitting new user:", newInput);
-
-      const response = await axios.post(
-        'https://api.escuelajs.co/api/v1/users',
-        newInput
-      ); // Replace with your actual API endpoint
-      console.log("API response:", response);
-
-      if (response.status === 201 || response.status === 200) {
-        const newUser = [response.data, ...users]; // Add new user at the beginning
-        setUsers([...newUser]);
-        console.log("New user added:", newUser);
-        toast.success("User added successfully");
-
-        navigate("/dashboard/users");
-      } else {
-        console.error("Failed to add user. Status code:", response.status);
-        toast.error("Failed to add user. Please try again.");
-      }
+      const response = await axiosInstance.post("/users", newInput);
+      setUsers([response.data, ...users]);
+      toast.success("User added successfully");
+      navigate("/users");
     } catch (error) {
-      console.error("Error adding user:", error);
-      if (error.response && error.response.data) {
-        console.error("Validation errors:", error.response.data);
-        toast.error(`Failed to add user: ${error.response.data.message}`);
-      } else {
-        toast.error("Failed to add user. Please try again.");
-      }
+      console.error("Error adding user:", error.response ? error.response.data : error.message);
+      toast.error("Failed to add user. Please try again.");
     }
   };
-  const handleCancel = () => {
-    navigate("/dashboard/users");
-  };
+
   return (
-    <div>
+     
       <div className="d-flex justify-content-center align-items-center vh-100">
         <Form onSubmit={onSubmit} className="add-user-form">
           <Form.Group className="mb-3" controlId="formfirstname">
@@ -143,20 +133,20 @@ function AddUser() {
             </div>
           </Form.Group>
           <div className="d-flex justify-content-center">
+            <Link to="/users" >
             <Button
               type="button"
-              onClick={handleCancel}
+             
               className="cancel-user-btn"
             >
               cancel
-            </Button>
+            </Button></Link>
             <Button variant="primary" type="submit" className="add-user-btn">
               Add User
             </Button>
           </div>
         </Form>
       </div>
-    </div>
   );
 }
 

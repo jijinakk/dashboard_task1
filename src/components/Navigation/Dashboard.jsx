@@ -1,32 +1,24 @@
-import React, { useContext } from 'react'
-import Sidebar from './Sidebar'
-import Header from './Header'
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import { Outlet } from 'react-router-dom';
-import { userContext } from '../UserContext';
-
-
+import React, { useContext } from "react";
+import Sidebar from "./Sidebar";
+import Header from "./Header";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Outlet } from "react-router-dom";
+import { userContext } from "../UserContext";
 const DashboardNew = () => {
-    const { setIsAuthenticated,loggedInUser,showSidebar,setShowSidebar} = useContext(userContext);
-    const toggleSidebar = () => setShowSidebar(!showSidebar);
-
+  const { showSidebar } = useContext(userContext);
 
   return (
-    <div>
     <Container fluid className="p-0">
-      <Row className='g-0'>
+      <Row className="g-0" style={{ height: "100vh", overflow: "hidden" }}>
+        
         {/* Sidebar */}
         {showSidebar && (
           <Col
+            xs={2}  md={4} lg={3} xl={2} xxl={1}
+            className="bg-light sidebar "
            
-            style={{
-             
-              minHeight: "100vh",
-              position: "fixed",
-            }}
           >
             <Sidebar />
           </Col>
@@ -34,35 +26,30 @@ const DashboardNew = () => {
 
         {/* Header and Main Content */}
         <Col
-          xs={12}
-          md={showSidebar ? 10 : 12} // Adjust column width dynamically
+         xs = {showSidebar? 12: 12} md={showSidebar ? 6: 12}  xl={showSidebar ? 8 : 12}  xxl={showSidebar?10:12}
           style={{
-            marginLeft: showSidebar ? (showSidebar ? "16.67%" : "0") : "0", // Adjust based on sidebar visibility
+            marginLeft: showSidebar ? "10.7%" : "0",
             transition: "margin-left 0.3s ease",
+            position:"fixed",width:"90%"
           }}
         >
           {/* Header */}
-          <Row>
-            <Col
-              
-            >
+          <Row className="g-0">
+            <Col style={{zIndex: 1}}>
               <Header />
-              
             </Col>
           </Row>
 
           {/* Main Content */}
-          <Row>
+          <Row className="g-0"> 
             <Col style={{ padding: "20px" }}>
-             <Outlet />
-              {/* Add your main content here */}
+              <Outlet />
             </Col>
           </Row>
         </Col>
       </Row>
     </Container>
-  </div>
-  )
-}
+  );
+};
 
-export default DashboardNew
+export default DashboardNew; 
