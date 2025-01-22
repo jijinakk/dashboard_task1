@@ -14,6 +14,7 @@ const UserContext = ({children}) => {
         return user ? JSON.parse(user) : null;
       });
       const [showSidebar, setShowSidebar] = useState(true);
+      const [product,setProduct] = useState([]);
 
       useEffect(()=>{
         const token = localStorage.getItem("token");
@@ -30,8 +31,10 @@ const UserContext = ({children}) => {
         users,
         setUsers,
         showSidebar,
-        setShowSidebar
-      }), [isAuthenticated, loggedInUser, users, showSidebar]);
+        setShowSidebar,
+        product,
+        setProduct
+      }), [isAuthenticated, loggedInUser, users, showSidebar, product]);
     
       return (
         <userContext.Provider value={contextValue}>

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { userContext } from "./UserContext";
 import { toast } from "react-toastify";
-import axiosInstance from "./axiosInstance";
+import { axiosInstance } from "./axiosInstance";
 
 const Login = () => {
   const { setIsAuthenticated, setLoggedInUser, isAuthenticated } =

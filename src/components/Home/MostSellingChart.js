@@ -66,8 +66,10 @@ const MostSellingCategories = () => {
     //   borderRadius: "15px", // Curved corners
     //   padding: "20px 20px", // Padding inside the container
     //   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"}}>
+    <div style={{ position: "relative", width: "100%", height: "400px" }}>
+
     <Pie data={data} options={options} />
-    // </div>
+    </div>
   );
 };
 

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import { userContext } from "../UserContext";
 import useFormInput from "./useFormInput";
 import { Link } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
+import { axiosInstance } from "../axiosInstance";
 function AddUser() {
   const { formInput, setFormInput } = useFormInput();
   const { users, setUsers } = useContext(userContext);

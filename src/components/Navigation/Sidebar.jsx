@@ -18,9 +18,9 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const menuItems = [
     { to: "/home", icon: <MdOutlineDashboardCustomize />, label: "Home" },
+    { to: "/users", icon: <GoPeople />, label: "Users" },
     { to: "/product", icon: <IoBagOutline />, label: "Product" },
     { to: "/inventory", icon: <MdOutlineInventory />, label: "Inventory" },
-    { to: "/users", icon: <GoPeople />, label: "Users" },
     { to: "/review", icon: <CiStar />, label: "Review" },
     { to: "/payment", icon: <MdOutlinePayments />, label: "Payment" },
     { to: "/integration", icon: <LiaLinkSolid />, label: "Integration" },

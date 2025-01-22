@@ -51,15 +51,8 @@ const Saleschart = () => {
   };
 
   return (
-    // <div style={{width: '100%', height: '380px',
-
-    //     margin: "20px auto",
-    //     borderRadius: "15px", // Curved corners
-    //     padding: "20px 20px", // Padding inside the container
-    //     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)"}}>
 
     <Bar data={data} options={options} />
-    // </div>
   );
 };
 

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext,useState,useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
@@ -7,18 +7,32 @@ import Col from "react-bootstrap/Col";
 import { Outlet } from "react-router-dom";
 import { userContext } from "../UserContext";
 const DashboardNew = () => {
-  const { showSidebar } = useContext(userContext);
+  const { showSidebar,setShowSidebar } = useContext(userContext);
 
+  
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 1400) {
+        setShowSidebar(false); // Show sidebar for larger screens
+      } else {
+        setShowSidebar(true); // Hide sidebar for smaller screens
+      }
+    };
+
+    // Initial check
+    handleResize();
+  }, [setShowSidebar]);
+  
   return (
     <Container fluid className="p-0">
-      <Row className="g-0" style={{ height: "100vh", overflow: "hidden" }}>
-        
+      <Row className="g-0" style={{ minHeight:"100vh", overflow: "hidden" }}>
         {/* Sidebar */}
         {showSidebar && (
           <Col
-            xs={2}  md={4} lg={3} xl={2} xxl={1}
-            className="bg-light sidebar "
+            
+            xl={2}
            
+            className="bg-light sidebar"
           >
             <Sidebar />
           </Col>
@@ -26,22 +40,25 @@ const DashboardNew = () => {
 
         {/* Header and Main Content */}
         <Col
-         xs = {showSidebar? 12: 12} md={showSidebar ? 6: 12}  xl={showSidebar ? 8 : 12}  xxl={showSidebar?10:12}
+        
+       
           style={{
-            marginLeft: showSidebar ? "10.7%" : "0",
+            marginLeft: showSidebar ? "11%" : "0",
             transition: "margin-left 0.3s ease",
-            position:"fixed",width:"90%"
+            width: "100%",
           }}
         >
           {/* Header */}
           <Row className="g-0">
-            <Col style={{zIndex: 1}}>
-              <Header />
+
+            <Col xxl={12} md={12} style={{ zIndex: 1 }}>
+            
+              <Header  />
             </Col>
           </Row>
 
           {/* Main Content */}
-          <Row className="g-0"> 
+          <Row className="g-0">
             <Col style={{ padding: "20px" }}>
               <Outlet />
             </Col>
@@ -52,4 +69,4 @@ const DashboardNew = () => {
   );
 };
 
-export default DashboardNew; 
+export default DashboardNew;

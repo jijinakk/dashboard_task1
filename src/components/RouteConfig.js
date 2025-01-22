@@ -1,6 +1,6 @@
 import React from "react"; // Top-level imports
 import Login from "./Login";
-import Product from "./Product";
+import Product from "./Product/ProductList";
 import Home from "./Home/Home";
 import DashboardNew from "./Navigation/Dashboard";
 import AddUser from "./User/AddUser";
@@ -45,3 +45,7 @@ const RouteConfig = () => {
 };
 
 export default RouteConfig;
+
+
+
+

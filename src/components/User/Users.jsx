@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
-import { Button, Modal, Form } from "react-bootstrap";
+import { Button, Modal, Form,Spinner } from "react-bootstrap";
 import { TiPlus } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { FaEdit } from "react-icons/fa";
@@ -11,7 +11,8 @@ import { toast } from "react-toastify";
 import { Row, Col } from "react-bootstrap";
 import { userContext } from "../UserContext";
 import useFormInput from "./useFormInput";
-import axiosInstance from "../axiosInstance";
+import { axiosInstance } from "../axiosInstance";
+import CommonTable from "../CommonTable";
 
 const Users = () => {
   const { formInput, setFormInput } = useFormInput();
@@ -22,15 +23,20 @@ const Users = () => {
   const [selectedUser, setSelectedUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationItems, setPaginationItems] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const itemsPerPage = 10;
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const res = await   axiosInstance.get("/users");
       setUsers(res.data);
     } catch (error) {
       console.error("Error fetching users:", error);
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -69,21 +75,23 @@ const Users = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
-  const handleAction = (users, actionType) => {
+  const handleAction = (user, actionType) => {
     setFormInput({
-      id: users.id,
-      avatar: users?.avatar,
-      name: users.name,
-      email: users.email,
-      role: users.role,
-      password: users.password,
+      id: user.id,
+      avatar: user?.avatar,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      password: user.password,
     });
 
-    console.log(formInput);
     if (actionType === "view") {
       setShowViewModal(true);
     } else if (actionType === "edit") {
       setShowEditModal(true);
+    } else if (actionType === "delete") {
+      setSelectedUser(user);
+      setShowDeleteModal(true);
     }
   };
 
@@ -139,6 +147,17 @@ const Users = () => {
     }
   };
 
+  const actions = {
+    view: (user) => {
+      handleAction(user, "view");
+    },
+    edit: (user) => {
+      handleAction(user, "edit");
+    },
+    delete: (user) => {
+      handleAction(user, "delete");
+    },
+  };
   return (
     <div>
       <div className="d-flex justify-content-end">
@@ -154,35 +173,24 @@ const Users = () => {
         </Link>
       </div>
 
-      <div className="justify-content-center user-table-container">
-        <Table responsive hover className="user-table border" striped>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((user) => (
-              <tr>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <IoEye onClick={() => handleAction(user, "view")} />{" "}
-                  <FaEdit onClick={() => handleAction(user, "edit")} />{" "}
-                  <MdDelete onClick={() => handleDelete(user)} />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </div>
-      <Pagination className="justify-content-center">
-        {paginationItems}
-      </Pagination>
+      <div>
+      {loading ? (
+        <div className="text-center">
+          <Spinner animation="border" variant="primary" />
+        </div>
+      ) : (
+        <>
+          <CommonTable
+            data={currentItems}
+            columns={["ID", "Name", "Email"]}
+            actions={actions}
+          />
+          <Pagination className="justify-content-center">{paginationItems}</Pagination>
+        </>
+      )}
+    </div>
+      
+      
       {/* view Modal */}
       <Modal
         show={showViewModal}

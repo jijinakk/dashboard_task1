@@ -1,3 +1,4 @@
+import { error } from "ajv/dist/vocabularies/applicator/dependencies";
 import axios from "axios";
 
 const axiosInstance = axios.create({
@@ -37,5 +38,11 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+const axiosInstanceProduct = axios.create({
+  baseURL: "https://api.escuelajs.co/api/v1/products",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
-export default axiosInstance;
+export { axiosInstance,axiosInstanceProduct};

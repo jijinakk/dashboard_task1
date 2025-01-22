@@ -86,58 +86,19 @@
 
 /* HOME css */
 
-
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 22px;
-  margin: 20px;
-
-  .card {
-    background-color: #4e8cff;
+   .custom-card
+   {
+    background-color:#4e8cff;
     flex: 1 1 calc(25% - 20px);
     /* By default, each card takes 25% width */
     border-radius: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  @media (max-width: 208px) {
-    .card {
-      flex: 1 1 calc(35% - 20px); /* Cards will take 50% width on medium screens */
-    }
-  }
-
-  @media (max-width: 300px) {
-    .card {
-      flex: 1 1 80%; /* Cards will stack on top of each other on small screens */
-    }
-  }
-}
-.chart-container {
-  display: flex;
-  flex-direction: row;
-  gap: 30px;
-  align-items: flex-start;
-  margin-top: 40px;
-
-  .chart {
-    flex: 1 1 calc(35% - 20px);
-    height: 400px;
+   }
+   .custom-chart {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-
-  @media (max-width: 1024px) {
-    .chart {
-      flex: 1 1 calc(40% - 20px);
-    }
-  }
-  @media (max-width: 768px) {
-    .chart {
-      flex: 1 1 100%;
-    }
-  }
-}
  /*   NAVIGATION   */
 
  .dashboard-container {
@@ -148,7 +109,6 @@
   .notification-btn {
     top: 10px;
     margin-right: 20px;
-    z-index: 1000;
   }
 
 .hamburger-btn {
@@ -220,4 +180,31 @@ padding: 10px 0px 0px 20px;
   height: 100vh;
   gap: 20px;
   color: #4e8cff;
+}
+.product-card
+{
+  width:350px;
+  height:auto;
+  margin-top:15px;
+  text-align:center;
+   margin: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.product-view-btn
+{
+  background-color:white;
+  color:#4e8cff;
+  border: none;
+
+  margin:10px;
+}
+.add-product-btn
+{
+  background-color: #4e8cff;
+  width: 150px;
+  padding: 10px;
+  margin: 20px 30px 20px 20px;
+  border-radius: 20px;
+  border: none;
 }
