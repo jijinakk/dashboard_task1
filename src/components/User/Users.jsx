@@ -1,16 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import Table from "react-bootstrap/Table";
 import Pagination from "react-bootstrap/Pagination";
 import { Button, Modal, Form,Spinner } from "react-bootstrap";
 import { TiPlus } from "react-icons/ti";
 import { Link } from "react-router-dom";
-import { FaEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
-import { IoEye } from "react-icons/io5";
+
 import { toast } from "react-toastify";
 import { Row, Col } from "react-bootstrap";
 import { userContext } from "../UserContext";
-import useFormInput from "./useFormInput";
+import useFormInput from "../useFormInput";
 import { axiosInstance } from "../axiosInstance";
 import CommonTable from "../CommonTable";
 

@@ -30,7 +30,7 @@ const Saleschart = () => {
         borderColor: "rgba(75,192,192,1)", // Line color
         backgroundColor: "rgba(81, 214, 255, 0.31)", // Area fill color
         tension: 0.4, // Makes the line curved
-        fill: true, // Fills the area below the line
+        fill: true, 
       },
     ],
   };

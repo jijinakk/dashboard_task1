@@ -1,6 +1,5 @@
-
 // useFormInput.js
-import { useState } from 'react';
+import { useState } from "react";
 
 const useFormInput = () => {
   const [formInput, setFormInput] = useState({
@@ -12,11 +11,20 @@ const useFormInput = () => {
     password: "",
   });
 
-  
+  const [productFormInput, setProductFormInput] = useState({
+    id: "",
+    title: "",
+    price: "",
+    categoryId: "",
+    description: "",
+    images: [],
+  });
 
   return {
     formInput,
     setFormInput,
+    productFormInput,
+    setProductFormInput,
   };
 };
 

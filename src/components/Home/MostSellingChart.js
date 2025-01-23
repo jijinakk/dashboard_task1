@@ -11,7 +11,6 @@ import {
   
 } from "chart.js";
 
-// Register the necessary components for Chart.js
 ChartJS.register(
   Title,
   Tooltip,
@@ -23,19 +22,19 @@ ChartJS.register(
 
 const MostSellingCategories = () => {
   const data = {
-    labels: ["Electronics", "Fashion", "Home & Kitchen", "Books", "Toys"], // Categories
+    labels: ["Electronics", "Fashion", "Home & Kitchen", "Books", "Toys"], 
     datasets: [
       {
-        data: [40, 25, 15, 10, 10], // Sales data for each category
+        data: [40, 25, 15, 10, 10], 
         backgroundColor: [
           "#FF5733",
           "#33FF57",
           "#3357FF",
           "#F1C40F",
           "#8E44AD",
-        ], // Colors for each segment
-        borderColor: "#fff", // Border color for each segment
-        borderWidth: 2, // Border width for each segment
+        ], 
+        borderColor: "#fff", 
+        borderWidth: 2, 
       },
     ],
   };
@@ -44,7 +43,7 @@ const MostSellingCategories = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: "right", // Position of the legend
+        position: "right", 
       },
       title: {
         display: true,

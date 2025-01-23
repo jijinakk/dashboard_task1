@@ -5,7 +5,7 @@ import {  useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userContext } from "../UserContext";
-import useFormInput from "./useFormInput";
+import useFormInput from "../useFormInput";
 import { Link } from "react-router-dom";
 import { axiosInstance } from "../axiosInstance";
 function AddUser() {
@@ -46,8 +46,8 @@ function AddUser() {
   return (
      
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <Form onSubmit={onSubmit} className="add-user-form">
-          <Form.Group className="mb-3" controlId="formfirstname">
+        <Form onSubmit={onSubmit} className="addforms">
+          <Form.Group className="mb-3" controlId="formname">
             <div className="row">
               <Form.Label className="col-sm-4 col-form-label text-start">
                  Name *
@@ -100,7 +100,7 @@ function AddUser() {
           </Form.Group>
           
          
-          <Form.Group className="mb-3" controlId="formCountry">
+          <Form.Group className="mb-3" controlId="formAvatar">
             <div className="row">
               <Form.Label className="col-sm-4 col-form-label text-start">
               avatar *

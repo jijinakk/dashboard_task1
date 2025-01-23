@@ -8,6 +8,7 @@ import { Routes, Route } from "react-router-dom";
 import Users from "./User/Users";
 import ProtectedRoute from "./ProtectedRoute";
 import PageNotFound from "./PageNotFound";
+import AddProduct from "./Product/AddProduct";
 
 const RouteConfig = () => {
   return (
@@ -38,6 +39,7 @@ const RouteConfig = () => {
         <Route path="product" element={<Product />} />
         <Route path="users" element={<Users />} />
         <Route path="adduser" element={<AddUser />} />
+        <Route path="add-product" element={<AddProduct/>} />
       </Route>
       <Route path="*" element={<PageNotFound/> } />
     </Routes>

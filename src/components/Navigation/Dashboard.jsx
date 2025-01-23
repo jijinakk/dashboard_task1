@@ -13,9 +13,9 @@ const DashboardNew = () => {
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1400) {
-        setShowSidebar(false); // Show sidebar for larger screens
+        setShowSidebar(false); 
       } else {
-        setShowSidebar(true); // Hide sidebar for smaller screens
+        setShowSidebar(true); 
       }
     };
 
