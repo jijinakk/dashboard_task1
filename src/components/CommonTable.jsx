@@ -7,7 +7,7 @@ import { MdDelete } from "react-icons/md";
 const CommonTable = ({ data, columns, actions }) => {
   
   return (
-    <Table responsive hover className="user-table border" striped>
+    <Table responsive hover className="user-table border col-sm-10 col-xs-12" striped>
       <thead>
         <tr>
           {columns.map((col) => (

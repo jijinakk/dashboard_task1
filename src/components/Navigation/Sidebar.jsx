@@ -12,7 +12,6 @@ import { CiStar } from "react-icons/ci";
 import { LiaLinkSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 import { userContext } from "../UserContext";
-
 const Sidebar = () => {
   const { showSidebar } = useContext(userContext);
   const navigate = useNavigate();
@@ -37,7 +36,7 @@ const Sidebar = () => {
         backgroundColor: "rgb(42, 156, 248)"
       }}
     >
-      <div className="d-flex  align-items-center">
+      <div className="d-flex align-items-center">
         <AiOutlineAntDesign className="logo" />
         <h2 className="fw-bold fst-italic text-white logo-text">Square</h2>
       </div>
@@ -46,9 +45,9 @@ const Sidebar = () => {
           <Nav.Link
             key={index}
             onClick={() => handleNavigation(item.to)}
-            className="mb-2 text-light sidebar-icon"
-          >
-            {item.icon} <span className="sidebar-label">{item.label}</span>
+            className="mb-2 text-light d-flex align-items-center">
+            <div className="sidebar-icon-column">{item.icon}</div>
+            <div className="sidebar-label-column">{item.label}</div>
           </Nav.Link>
         ))}
       </Nav>

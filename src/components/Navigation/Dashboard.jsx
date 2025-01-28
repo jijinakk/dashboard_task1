@@ -1,4 +1,4 @@
-import React, { useContext,useState,useEffect } from "react";
+import React, { useContext,useEffect } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Container from "react-bootstrap/Container";
@@ -8,19 +8,25 @@ import { Outlet } from "react-router-dom";
 import { userContext } from "../UserContext";
 const DashboardNew = () => {
   const { showSidebar,setShowSidebar } = useContext(userContext);
-
-  
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth <= 1400) {
-        setShowSidebar(false); 
+        setShowSidebar(false);
       } else {
-        setShowSidebar(true); 
+        setShowSidebar(true);
       }
     };
 
     // Initial check
     handleResize();
+
+    // Add resize event listener
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, [setShowSidebar]);
   
   return (
@@ -29,9 +35,7 @@ const DashboardNew = () => {
         {/* Sidebar */}
         {showSidebar && (
           <Col
-            
             xl={2}
-           
             className="bg-light sidebar"
           >
             <Sidebar />
@@ -40,8 +44,6 @@ const DashboardNew = () => {
 
         {/* Header and Main Content */}
         <Col
-        
-       
           style={{
             marginLeft: showSidebar ? "11%" : "0",
             transition: "margin-left 0.3s ease",

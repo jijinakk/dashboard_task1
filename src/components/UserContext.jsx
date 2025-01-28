@@ -23,6 +23,9 @@ const UserContext = ({children}) => {
           setIsAuthenticated(true);
         }
       },[])
+       const [showEditModal, setShowEditModal] = useState(false);
+        const [showDeleteModal, setShowDeleteModal] = useState(false);
+        const [showViewModal, setShowViewModal] = useState(false);
       const contextValue = useMemo(() => ({
         isAuthenticated,
         setIsAuthenticated,
@@ -33,8 +36,8 @@ const UserContext = ({children}) => {
         showSidebar,
         setShowSidebar,
         products,
-        setProducts
-      }), [isAuthenticated, loggedInUser, users, showSidebar, products]);
+        setProducts,showEditModal, setShowEditModal,showDeleteModal, setShowDeleteModal,showViewModal, setShowViewModal
+      }), [isAuthenticated, loggedInUser, users, showSidebar, products,showDeleteModal,showEditModal,showViewModal]);
     
       return (
         <userContext.Provider value={contextValue}>

@@ -137,11 +137,11 @@ function AddUser() {
             <Button
               type="button"
              
-              className="cancel-user-btn"
+              className="cancel-btn"
             >
               cancel
             </Button></Link>
-            <Button variant="primary" type="submit" className="add-user-btn">
+            <Button variant="primary" type="submit" className="add-btn">
               Add User
             </Button>
           </div>

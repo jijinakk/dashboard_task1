@@ -16,6 +16,7 @@ const useFormInput = () => {
     title: "",
     price: "",
     categoryId: "",
+    categoryname:"",
     description: "",
     images: [],
   });

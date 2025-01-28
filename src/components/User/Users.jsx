@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useCallback } from "react";
 import Pagination from "react-bootstrap/Pagination";
 import { Button, Modal, Form,Spinner } from "react-bootstrap";
 import { TiPlus } from "react-icons/ti";
@@ -13,10 +13,8 @@ import CommonTable from "../CommonTable";
 
 const Users = () => {
   const { formInput, setFormInput } = useFormInput();
-  const { users, setUsers } = useContext(userContext);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showViewModal, setShowViewModal] = useState(false);
+  const { users, setUsers,showDeleteModal,setShowDeleteModal,showViewModal,setShowViewModal,showEditModal,setShowEditModal } = useContext(userContext);
+ 
   const [selectedUser, setSelectedUser] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
   const [paginationItems, setPaginationItems] = useState([]);
@@ -24,7 +22,7 @@ const Users = () => {
 
   const itemsPerPage = 10;
 
-  const fetchUsers = async () => {
+  const fetchUsers =useCallback( async () => {
     setLoading(true);
     try {
       const res = await   axiosInstance.get("/users");
@@ -35,7 +33,7 @@ const Users = () => {
     finally{
       setLoading(false);
     }
-  };
+  },[setUsers])
 
   useEffect(() => {
     fetchUsers();
@@ -45,7 +43,7 @@ const Users = () => {
     } else {
       setCurrentPage(1); // Default to page 1 if no saved page
     }
-  }, []);
+  }, [fetchUsers]);
   
 
   const handlePageChange = (page) => {
@@ -119,10 +117,7 @@ const Users = () => {
       toast.error("Failed to update user details. Please try again.");
     }
   };
-  const handleDelete = (user) => {
-    setSelectedUser(user);
-    setShowDeleteModal(true);
-  };
+  
   const handleDeleteUser = async (e) => {
     e.preventDefault();
   
@@ -160,7 +155,7 @@ const Users = () => {
       <div className="d-flex justify-content-end">
         <Link to="/adduser">
         <Button
-          className="add-user-btn"
+          className="add-btn"
           variant="primary"
         >
           {" "}
@@ -202,7 +197,7 @@ const Users = () => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <div className="user-profile-container">
+            <div className="profile-container">
               <Row className="mb-4">
                 <Col md={6}>
                   <img
@@ -221,7 +216,7 @@ const Users = () => {
                 </Col>
               </Row>
             </div>
-            <div className="user-profile-container mt-4">
+            <div className="profile-container mt-4">
               <Form>
                 <Row className="mb-3">
                   <Col md={4}>
@@ -233,7 +228,7 @@ const Users = () => {
                     <Form.Group controlId="formfirstname">
                       <Form.Label> Name</Form.Label>
                       <Form.Control
-                        className="user-profile-input"
+                        className="profile-input"
                         type="text"
                         name="name"
                         value={formInput?.name || " --- "}
@@ -246,7 +241,7 @@ const Users = () => {
                     <Form.Group controlId="formEmail">
                       <Form.Label>Email</Form.Label>
                       <Form.Control
-                        className="user-profile-input"
+                        className="profile-input"
                         type="text"
                         name="email"
                         value={formInput?.email || " ----"}
@@ -258,7 +253,7 @@ const Users = () => {
                     <Form.Group controlId="formRole">
                       <Form.Label>Role</Form.Label>
                       <Form.Control
-                        className="user-profile-input"
+                        className="profile-input"
                         type="text"
                         name="role"
                         value={formInput?.role || " ----"}
@@ -286,7 +281,7 @@ const Users = () => {
         </Modal.Header>
         <Modal.Body>
           <div className="d-flex justify-content-center align-items-center">
-            <Form className="edit-user-form" onSubmit={handleEditSubmit}>
+            <Form className="edit-form" onSubmit={handleEditSubmit}>
               <Form.Group className="mb-3" controlId="formBasicEmail">
                 <div className="row">
                   <Form.Label className="col-sm-4 col-form-label text-start">

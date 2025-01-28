@@ -26,11 +26,9 @@ const AddProduct = () => {
     }
     try {
       const productid = products.length + 1;
-      const newInput = { ...productFormInput, id: 100 };
+      const newInput = { ...productFormInput, id: productid };
       //   const formData = new FormData(newInput);
-      console.log(newInput);
       const response = await axiosInstanceProduct.post("/", newInput);
-      console.log(response.data);
       setProducts([response.data, ...products]);
       toast.success("Product added successfully");
       navigate("/product");
@@ -45,7 +43,6 @@ const AddProduct = () => {
   const uploadImage = () => {
     const imageInput = document.getElementById("imageInput");
     const imageUrl = imageInput.value.trim();
-    console.log(imageUrl);
     // Validate the URL before adding
     if (!isURL(imageUrl, { require_protocol: true })) {
       toast.error("Please enter a valid URL starting with http or https.");
@@ -113,8 +110,11 @@ const AddProduct = () => {
                   defaultValue=""
                 >
                   <option value="">Select Category</option>
-                  <option value="5">Miscellaneous</option>
                   <option value="1">Clothes</option>
+                  <option value="3">Furniture</option>
+                  <option value="4">Shoes</option>
+
+
                 </Form.Select>
               </div>
             </div>
@@ -154,13 +154,13 @@ const AddProduct = () => {
             </div>
           </Form.Group>
           <div className="d-flex justify-content-center">
-            <Link to="/add-product">
-              <Button type="button" className="cancel-user-btn">
+            <Link to="/product">
+              <Button type="button" className="cancel-btn">
                 cancel
               </Button>
             </Link>
-            <Button variant="primary" type="submit" className="add-user-btn">
-              Add User
+            <Button variant="primary" type="submit" className="add-btn">
+              Add Product
             </Button>
           </div>
         </Form>
